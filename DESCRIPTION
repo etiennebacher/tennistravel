@@ -1,0 +1,14 @@
+Package: tennistravel
+Title: tennistravel
+Version: 0.0.0.9000
+Authors@R: person('Etienne', 'Bacher', email = 'etienne.bacher@protonmail.com', role = c('cre', 'aut'))
+Description: PKG_DESC.
+License: What license is it under?
+Imports: 
+    config,
+    golem,
+    shiny,
+    data.table
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1

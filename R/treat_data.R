@@ -147,18 +147,42 @@ library(tidyr)
 library(echarts4r)
 
 
-tennis_data <- fread("inst/tennis_data/Data_geo.csv")
+tennis_data <- fread("inst/tennis_data/Data_geo.csv") %>% 
+  
+  # Create the order in which the player plays the tournaments
+  arrange(player_name, Date) %>% 
+  select(-Date) %>% 
+  group_by(player_name, Year) %>% 
+  distinct() %>% 
+  mutate(order = row_number()) %>% 
+  ungroup()
+
 
 tennis_data %>% 
-  arrange(player_name, Date) %>% 
-  group_by(player_name, Date) %>% 
-  mutate(order = row_number()) %>% 
-  filter(Year == "2015", grepl("Federer", player_name)) %>%
-  e_charts(long) %>%
-  e_geo() %>%
+  filter(Year == "2015", grepl("Nadal", player_name)) %>%
+  mutate(
+    departure = Location,
+    arrival = lead(Location),
+    lat_d = lat,
+    long_d = long,
+    lat_a = lead(lat),
+    long_a = lead(long),
+    lat_a = ifelse(is.na(lat_a), lat_d, lat_a),
+    long_a = ifelse(is.na(long_a), long_d, long_a)
+  ) %>% 
+  group_by(order) %>% 
+  e_charts(timeline = TRUE) %>%
+  e_geo(roam = TRUE) %>%
+  e_lines(
+    long_d,
+    lat_d,
+    long_a,
+    lat_a,
+    lineStyle = list(normal = list(curveness = 0.3))
+  ) %>% 
   e_scatter(
     lat,
-    bind= Location,
+    bind = Location,
     coord_system = "geo",
     symbol_size = 10
   ) %>%

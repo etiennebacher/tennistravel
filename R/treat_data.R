@@ -171,7 +171,7 @@ tennis_data %>%
     long_a = ifelse(is.na(long_a), long_d, long_a)
   ) %>% 
   group_by(order) %>% 
-  e_charts(timeline = TRUE) %>%
+  e_charts(long_d, timeline = TRUE) %>%
   e_geo(roam = TRUE) %>%
   e_lines(
     long_d,
@@ -179,9 +179,9 @@ tennis_data %>%
     long_a,
     lat_a,
     lineStyle = list(normal = list(curveness = 0.3))
-  ) %>% 
+  ) %>%
   e_scatter(
-    lat,
+    lat_d,
     bind = Location,
     coord_system = "geo",
     symbol_size = 10

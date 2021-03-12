@@ -78,117 +78,172 @@ clean_and_geocode <- function() {
 
 #' Function to compute the distance between two points
 #' 
-#' Credit for this function goes to Mario Pineda-Krch: https://www.r-bloggers.com/2010/11/great-circle-distance-calculations-in-r/
+#' This function was adapted from the source code of footprint::latlong_footprint()
 #'
-#' @param long1 Longitude of the first city
-#' @param lat1 Latitude of the first city
-#' @param long2 Longitude of the second city
-#' @param lat2 Latitude of the second city
+#' @param departure_lat Latitude of the first city
+#' @param departure_long Longitude of the first city
+#' @param arrival_lat Latitude of the second city
+#' @param arrival_long Longitude of the second city
 #'
 #' @return A numeric value
 #'
 
-gcd.vif <- function(long1, lat1, long2, lat2) {
-  
-  # WGS-84 ellipsoid parameters
-  
-  a <- 6378137         # length of major axis of the ellipsoid (radius at equator)
-  b <- 6356752.314245  # ength of minor axis of the ellipsoid (radius at the poles)
-  f <- 1/298.257223563 # flattening of the ellipsoid
-  L <- long2-long1 # difference in longitude
-  U1 <- atan((1-f) * tan(lat1)) # reduced latitude
-  U2 <- atan((1-f) * tan(lat2)) # reduced latitude
-  sinU1 <- sin(U1)
-  cosU1 <- cos(U1)
-  sinU2 <- sin(U2)
-  cosU2 <- cos(U2)
-  cosSqAlpha <- NULL
-  sinSigma <- NULL
-  cosSigma <- NULL
-  cos2SigmaM <- NULL
-  sigma <- NULL
-  lambda <- L
-  lambdaP <- 0
-  iterLimit <- 100
-  while (abs(lambda-lambdaP) > 1e-12 & iterLimit>0) {
-    sinLambda <- sin(lambda)
-    cosLambda <- cos(lambda)
-    sinSigma <- sqrt( (cosU2*sinLambda) * (cosU2*sinLambda) +
-                        (cosU1*sinU2-sinU1*cosU2*cosLambda) * (cosU1*sinU2-sinU1*cosU2*cosLambda) )
-    if (sinSigma==0) return(0)  # Co-incident points
-    cosSigma <- sinU1*sinU2 + cosU1*cosU2*cosLambda
-    sigma <- atan2(sinSigma, cosSigma)
-    sinAlpha <- cosU1 * cosU2 * sinLambda / sinSigma
-    cosSqAlpha <- 1 - sinAlpha*sinAlpha
-    cos2SigmaM <- cosSigma - 2*sinU1*sinU2/cosSqAlpha
-    if (is.na(cos2SigmaM)) cos2SigmaM <- 0  # Equatorial line: cosSqAlpha=0
-    C <- f/16*cosSqAlpha*(4+f*(4-3*cosSqAlpha))
-    lambdaP <- lambda
-    lambda <- L + (1-C) * f * sinAlpha *
-      (sigma + C*sinSigma*(cos2SigmaM+C*cosSigma*(-1+2*cos2SigmaM*cos2SigmaM)))
-    iterLimit <- iterLimit - 1
+custom_dist <- function (departure_lat, departure_long, arrival_lat, arrival_long) 
+{
+  if (!(all(is.numeric(c(departure_long, arrival_long))) && 
+        departure_long >= -180 && arrival_long >= -180 && departure_long <= 
+        180 && arrival_long <= 180)) {
+    stop("Longitude must be numeric and has values between -180 and 180")
   }
-  if (iterLimit==0) return(NA)  # formula failed to converge
-  uSq <- cosSqAlpha * (a*a - b*b) / (b*b)
-  A <- 1 + uSq/16384*(4096+uSq*(-768+uSq*(320-175*uSq)))
-  B <- uSq/1024 * (256+uSq*(-128+uSq*(74-47*uSq)))
-  deltaSigma = B*sinSigma*(cos2SigmaM+B/4*(cosSigma*(-1+2*cos2SigmaM^2) -
-                                             B/6*cos2SigmaM*(-3+4*sinSigma^2)*(-3+4*cos2SigmaM^2)))
-  s <- b*A*(sigma-deltaSigma) / 1000
-  return(s) # Distance in km
+  if (!(all(is.numeric(c(departure_lat, arrival_lat))) && 
+        departure_lat >= -90 && arrival_lat >= -90 && departure_lat <= 
+        90 && arrival_lat <= 90)) {
+    stop("Latitude must be numeric and has values between -90 and 90")
+  }
+  lon1 = departure_long * pi/180
+  lat1 = departure_lat * pi/180
+  lon2 = arrival_long * pi/180
+  lat2 = arrival_lat * pi/180
+  radius = 6373
+  dlon = lon2 - lon1
+  dlat = lat2 - lat1
+  a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
+  b = 2 * atan2(sqrt(a), sqrt(1 - a))
+  distance = radius * b
+  return(distance)
+}
+
+
+# Get the data and create the order in which the players play
+# the tournaments
+get_tennis_data <- function() {
+  
+  data.table::fread("inst/tennis_data/Data_geo.csv") %>%
+    dplyr::arrange(player_name, Date) %>% 
+    dplyr::select(-Date) %>% 
+    dplyr::group_by(player_name, Year) %>% 
+    dplyr::distinct() %>% 
+    dplyr::mutate(order = dplyr::row_number()) %>% 
+    dplyr::ungroup()
+  
+}
+
+
+# Filter by player and year
+# Format correctly latitudes and longitudes to compute distance
+# Returns a dataset
+filter_player_year <- function(player, year) {
+  
+  tennis_data %>% 
+    filter(Year == year, grepl(player, player_name)) %>%
+    mutate(
+      departure = Location,
+      arrival = lead(Location),
+      lat_d = lat,
+      long_d = long,
+      lat_a = lead(lat),
+      long_a = lead(long),
+      lat_a = ifelse(is.na(lat_a), lat_d, lat_a),
+      long_a = ifelse(is.na(long_a), long_d, long_a)
+    )
+  
+}
+
+# Compute the total distance for a specific player and year
+# Returns a number (in km)
+distance_player_year <- function(player, year) {
+  
+  data_filtered <- filter_player_year(player, year)
+  
+  complete_dist <- data_filtered %>% 
+    mutate(
+      dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a)
+    ) %>% 
+    pull(dist_per_tourn) %>% 
+    sum(., na.rm = T)
+  
+  return(complete_dist)
+  
+}
+
+
+test <- function (departure_lat, departure_long, arrival_lat, arrival_long, 
+                  flightClass = "Unknown", output = "co2e") 
+{
+  if (!(all(is.numeric(c(departure_long, arrival_long))) && 
+        departure_long >= -180 && arrival_long >= -180 && departure_long <= 
+        180 && arrival_long <= 180)) {
+    stop("Airport longitude must be numeric and has values between -180 and 180")
+  }
+  if (!(all(is.numeric(c(departure_lat, arrival_lat))) && 
+        departure_lat >= -90 && arrival_lat >= -90 && departure_lat <= 
+        90 && arrival_lat <= 90)) {
+    stop("Airport latitude must be numeric and has values between -90 and 90")
+  }
+  lon1 = departure_long * pi/180
+  lat1 = departure_lat * pi/180
+  lon2 = arrival_long * pi/180
+  lat2 = arrival_lat * pi/180
+  radius = 6373
+  dlon = lon2 - lon1
+  dlat = lat2 - lat1
+  a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
+  b = 2 * atan2(sqrt(a), sqrt(1 - a))
+  distance = radius * b
+  distance_type <- dplyr::case_when(distance <= 483 ~ "short", 
+                                    distance >= 3700 ~ "long", TRUE ~ "medium")
+  emissions_vector <- footprint:::conversion_factors %>% 
+    dplyr::filter(distance %in% distance_type) %>% 
+    dplyr::filter(flightclass == flightClass) %>% 
+    dplyr::pull(output)
+  round(distance * emissions_vector, 3)
 }
 
 
 
-
-library(data.table)
-library(dplyr)
-library(tidyr)
-library(echarts4r)
-
-
-tennis_data <- fread("inst/tennis_data/Data_geo.csv") %>% 
+# Compute the total footprint for a specific player and year
+# Output can several values, see ?footprint::latlong_footprint
+# Returns a number (in kilograms of output)
+footprint_player_year <- function(player, year, output = "co2e") {
   
-  # Create the order in which the player plays the tournaments
-  arrange(player_name, Date) %>% 
-  select(-Date) %>% 
-  group_by(player_name, Year) %>% 
-  distinct() %>% 
-  mutate(order = row_number()) %>% 
-  ungroup()
+  data_filtered <- filter_player_year(player, year)
+  
+  complete_footprint <- data_filtered %>% 
+    mutate(
+      footprint_per_tourn = footprint::latlong_footprint(
+        lat_d, long_d, lat_a, long_a,
+        output = output
+      )
+    ) %>% 
+    pull(footprint_per_tourn) %>% 
+    sum(., na.rm = T)
+  
+  return(complete_footprint)
+  
+}
 
 
-tennis_data %>% 
-  filter(Year == "2015", grepl("Nadal", player_name)) %>%
-  mutate(
-    departure = Location,
-    arrival = lead(Location),
-    lat_d = lat,
-    long_d = long,
-    lat_a = lead(lat),
-    long_a = lead(long),
-    lat_a = ifelse(is.na(lat_a), lat_d, lat_a),
-    long_a = ifelse(is.na(long_a), long_d, long_a)
-  ) %>% 
-  group_by(order) %>% 
-  e_charts(long_d, timeline = TRUE) %>%
-  e_geo(roam = TRUE) %>%
-  e_lines(
-    long_d,
-    lat_d,
-    long_a,
-    lat_a,
-    lineStyle = list(normal = list(curveness = 0.3))
-  ) %>%
-  e_scatter(
-    lat_d,
-    bind = Location,
-    coord_system = "geo",
-    symbol_size = 10
-  ) %>%
-  e_tooltip(
-    formatter = htmlwidgets::JS("
-      function(params){
-        return(params.name)
-      }
-    "))
+# filter_player_year("Federer", 2004)%>% 
+#   # group_by(order) %>% 
+#   e_charts(long_d) %>%
+#   e_geo(roam = TRUE) %>%
+#   e_lines(
+#     long_d,
+#     lat_d,
+#     long_a,
+#     lat_a,
+#     lineStyle = list(normal = list(curveness = 0.3))
+#   ) %>%
+#   e_scatter(
+#     lat_d,
+#     bind = Location,
+#     coord_system = "geo",
+#     symbol_size = 10
+#   ) %>%
+#   e_tooltip(
+#     formatter = htmlwidgets::JS("
+#       function(params){
+#         return(params.name)
+#       }
+#     ")) %>% 
+#   e_legend(show = FALSE)

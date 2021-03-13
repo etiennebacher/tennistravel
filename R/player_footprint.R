@@ -69,26 +69,3 @@ footprint_player_year <- function(player, year, output = "co2e") {
 }
 
 
-#' Compute the evolution of footprint per year for a specific player
-#'
-#' @param player Player name
-#'
-#' @return A tibble
-#' @export
-#'
-evol_footprint <- function(player) {
-  
-  get_tennis_data() %>% 
-    filter(grepl(paste(player, collapse="|"), player_name)) %>% 
-    select(player_name, Year, contains(c("_d", "_a"))) %>% 
-    mutate(
-      footprint = custom_footprint(lat_d, long_d, lat_a, long_a),
-      Year = factor(Year)
-    ) %>% 
-    select(-contains(c("_a", "_d"))) %>% 
-    group_by(player_name, Year) %>% 
-    summarise(footprint = sum(footprint, na.rm = T)) %>% 
-    arrange(player_name, Year)
-  
-}
-

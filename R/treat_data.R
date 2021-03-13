@@ -3,7 +3,7 @@
 #' This function imports the raw dataset, cleans it, and uses OSM API (nominatim) to geocode (i.e detect the latitude and longitude) the cities.
 #'
 #' @return Writes a CSV file named "Data_geo.csv"
-#'
+#' @import dplyr
 
 clean_and_geocode <- function() {
   
@@ -75,6 +75,47 @@ clean_and_geocode <- function() {
 }
 
 
+#' Get the data and create the order in which the players play the tournaments
+#'
+#' @return A tibble
+#' @export
+#'
+get_tennis_data <- function() {
+  
+  data.table::fread("inst/tennis_data/Data_geo.csv") %>%
+    arrange(player_name, Date) %>% 
+    select(-Date) %>% 
+    group_by(player_name, Year) %>% 
+    distinct() %>% 
+    mutate(order = row_number()) %>% 
+    ungroup() 
+  
+}
+
+
+#' Compute the total distance for a specific player and year
+#'
+#' @param player Name of the player
+#' @param year Year 
+#'
+#' @return A number (in km)
+#' @export
+#'
+distance_player_year <- function(player, year) {
+  
+  data_filtered <- filter_player_year(player, year)
+  
+  complete_dist <- data_filtered %>% 
+    mutate(
+      dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a)
+    ) %>% 
+    pull(dist_per_tourn) %>% 
+    sum(., na.rm = T)
+  
+  return(complete_dist)
+  
+}
+
 
 #' Function to compute the distance between two points
 #' 
@@ -114,24 +155,50 @@ custom_dist <- function (departure_lat, departure_long, arrival_lat, arrival_lon
 }
 
 
-# Get the data and create the order in which the players play
-# the tournaments
-get_tennis_data <- function() {
+#' Compute the total footprint for a specific player and year
+#'
+#' @param player Player name
+#' @param year Year
+#' @param output Output type, can take several values, see ?footprint::latlong_footprint
+#'
+#' @return A number (in kilograms of output)
+#' @export
+#' 
+footprint_player_year <- function(player, year, output = "co2e") {
   
-  data.table::fread("inst/tennis_data/Data_geo.csv") %>%
-    dplyr::arrange(player_name, Date) %>% 
-    dplyr::select(-Date) %>% 
-    dplyr::group_by(player_name, Year) %>% 
-    dplyr::distinct() %>% 
-    dplyr::mutate(order = dplyr::row_number()) %>% 
-    dplyr::ungroup()
+  data_filtered <- filter_player_year(player, year)
+  
+  # For loop because using footprint::latlong_footprint() in mutate
+  # creates a warning
+  complete_footprint <- c()
+  for (i in 1:nrow(data_filtered)) {
+    data_row <- data_filtered[i, ]
+    complete_footprint[i] <- footprint::latlong_footprint(
+      departure_lat = data_row$lat_d,
+      departure_long = data_row$long_d,
+      arrival_lat = data_row$lat_a,
+      arrival_long = data_row$long_a,
+      output = output
+    )
+  }
+  
+  return(
+    sum(complete_footprint, na.rm = T)
+  )
   
 }
 
 
-# Filter by player and year
-# Format correctly latitudes and longitudes to compute distance
-# Returns a dataset
+#' Filter by player and year
+#' 
+#' Format correctly latitudes and longitudes to compute distance
+#'
+#' @param player Player name
+#' @param year Year
+#'
+#' @return A tibble
+#' @export
+#'
 filter_player_year <- function(player, year) {
   
   tennis_data %>% 
@@ -149,78 +216,7 @@ filter_player_year <- function(player, year) {
   
 }
 
-# Compute the total distance for a specific player and year
-# Returns a number (in km)
-distance_player_year <- function(player, year) {
-  
-  data_filtered <- filter_player_year(player, year)
-  
-  complete_dist <- data_filtered %>% 
-    mutate(
-      dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a)
-    ) %>% 
-    pull(dist_per_tourn) %>% 
-    sum(., na.rm = T)
-  
-  return(complete_dist)
-  
-}
 
-
-test <- function (departure_lat, departure_long, arrival_lat, arrival_long, 
-                  flightClass = "Unknown", output = "co2e") 
-{
-  if (!(all(is.numeric(c(departure_long, arrival_long))) && 
-        departure_long >= -180 && arrival_long >= -180 && departure_long <= 
-        180 && arrival_long <= 180)) {
-    stop("Airport longitude must be numeric and has values between -180 and 180")
-  }
-  if (!(all(is.numeric(c(departure_lat, arrival_lat))) && 
-        departure_lat >= -90 && arrival_lat >= -90 && departure_lat <= 
-        90 && arrival_lat <= 90)) {
-    stop("Airport latitude must be numeric and has values between -90 and 90")
-  }
-  lon1 = departure_long * pi/180
-  lat1 = departure_lat * pi/180
-  lon2 = arrival_long * pi/180
-  lat2 = arrival_lat * pi/180
-  radius = 6373
-  dlon = lon2 - lon1
-  dlat = lat2 - lat1
-  a = (sin(dlat/2))^2 + cos(lat1) * cos(lat2) * (sin(dlon/2))^2
-  b = 2 * atan2(sqrt(a), sqrt(1 - a))
-  distance = radius * b
-  distance_type <- dplyr::case_when(distance <= 483 ~ "short", 
-                                    distance >= 3700 ~ "long", TRUE ~ "medium")
-  emissions_vector <- footprint:::conversion_factors %>% 
-    dplyr::filter(distance %in% distance_type) %>% 
-    dplyr::filter(flightclass == flightClass) %>% 
-    dplyr::pull(output)
-  round(distance * emissions_vector, 3)
-}
-
-
-
-# Compute the total footprint for a specific player and year
-# Output can several values, see ?footprint::latlong_footprint
-# Returns a number (in kilograms of output)
-footprint_player_year <- function(player, year, output = "co2e") {
-  
-  data_filtered <- filter_player_year(player, year)
-  
-  complete_footprint <- data_filtered %>% 
-    mutate(
-      footprint_per_tourn = footprint::latlong_footprint(
-        lat_d, long_d, lat_a, long_a,
-        output = output
-      )
-    ) %>% 
-    pull(footprint_per_tourn) %>% 
-    sum(., na.rm = T)
-  
-  return(complete_footprint)
-  
-}
 
 
 # filter_player_year("Federer", 2004)%>% 

@@ -1,3 +1,12 @@
+#' Show on a map the trips of a particular player for a a year
+#'
+#' @param player Player name
+#' @param year Year
+#'
+#' @return
+#' @export
+#'
+
 map_travel <- function(player, year) {
   
   filter_player_year(player, year) %>%
@@ -31,7 +40,6 @@ map_travel <- function(player, year) {
     ) %>% 
     e_scatter(
       lat_d,
-      bind = Location,
       coord_system = "geo",
       symbol_size = 10
     ) %>%

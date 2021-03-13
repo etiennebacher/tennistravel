@@ -8,9 +8,11 @@ get_tennis_data <- function() {
   load("data/tennis_data_geocodes.rda") 
   
   tennis_data <- tennis_data_geocodes %>% 
+    group_by(player_name, Year) %>% 
     mutate(
     departure = Location,
     arrival = lead(Location),
+    arrival = ifelse(is.na(arrival), "End of year", arrival),
     lat_d = lat,
     long_d = long,
     lat_a = lead(lat),
@@ -45,28 +47,3 @@ filter_player_year <- function(player, year) {
 
 }
 
-
-# filter_player_year("Federer", 2004)%>% 
-#   # group_by(order) %>% 
-#   e_charts(long_d) %>%
-#   e_geo(roam = TRUE) %>%
-#   e_lines(
-#     long_d,
-#     lat_d,
-#     long_a,
-#     lat_a,
-#     lineStyle = list(normal = list(curveness = 0.3))
-#   ) %>%
-#   e_scatter(
-#     lat_d,
-#     bind = Location,
-#     coord_system = "geo",
-#     symbol_size = 10
-#   ) %>%
-#   e_tooltip(
-#     formatter = htmlwidgets::JS("
-#       function(params){
-#         return(params.name)
-#       }
-#     ")) %>% 
-#   e_legend(show = FALSE)

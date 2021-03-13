@@ -2,7 +2,7 @@
 % Please edit documentation in R/treat_data.R
 \name{get_tennis_data}
 \alias{get_tennis_data}
-\title{Get the data and create the order in which the players play the tournaments}
+\title{Get the cleaned data}
 \usage{
 get_tennis_data()
 }
@@ -10,5 +10,5 @@ get_tennis_data()
 A tibble
 }
 \description{
-Get the data and create the order in which the players play the tournaments
+Get the cleaned data
 }

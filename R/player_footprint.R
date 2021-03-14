@@ -10,7 +10,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 custom_footprint <- function(
   departure_lat,
   departure_long,

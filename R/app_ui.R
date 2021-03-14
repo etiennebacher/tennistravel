@@ -2,15 +2,26 @@
 #' 
 #' @param request Internal parameter for `{shiny}`. 
 #'     DO NOT REMOVE.
-#' @import shiny
+#' @import shiny fullPage pushbar
 #' @noRd
 app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    fluidPage(
-      h1("tennistravel")
+    fullPage(
+      opts = list(
+        normalScrollElements = "*"
+      ),
+      fullSection(
+        mod_homepage_ui("homepage_ui_1"),
+        fullSlide(
+          center = TRUE,
+          menu = NULL,
+          tags$h1("Hi"),
+          fullButtonLeft("Move left", outline = TRUE)
+        )
+      )
     )
   )
 }
@@ -34,9 +45,11 @@ golem_add_external_resources <- function(){
     bundle_resources(
       path = app_sys('app/www'),
       app_title = 'tennistravel'
-    )
+    ),
     # Add here other external resources
     # for example, you can add shinyalert::useShinyalert() 
+    textyle::use_textyle(),
+    pushbar::pushbar_deps()
   )
 }
 

@@ -8,11 +8,15 @@ Imports:
     config,
     golem,
     shiny,
+    data.table,
     dplyr,
     tidyr,
     echarts4r,
     magrittr,
-    data.table
+    fullPage,
+    textyle,
+    pushbar,
+    pkgload
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

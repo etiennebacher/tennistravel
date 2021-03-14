@@ -1,0 +1,16 @@
+/* Remove arrows from fullPage slides */
+
+.fp-controlArrow.fp-prev, .fp-controlArrow.fp-next { 
+  display: none;
+}
+
+
+/* Text colors */
+
+.h1 {
+  color: #b9b4b4;
+}
+
+.text {
+  color: #b9b4b4;
+}

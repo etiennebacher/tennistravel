@@ -8,9 +8,15 @@
 /* Text colors */
 
 .h1 {
-  color: #b9b4b4;
+  color: white;
 }
 
 .text {
-  color: #b9b4b4;
+  color: white;
 }
+
+#wellp-home {
+  opacity: 1;
+  background: rgba(0, 100, 255, 0.3)
+}
+

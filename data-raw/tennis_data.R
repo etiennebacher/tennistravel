@@ -1,31 +1,96 @@
-## code to prepare `tennis_data` dataset goes here
+# This data comes from hhttps://github.com/JeffSackmann/tennis_atp
 
 library(dplyr)
 library(tidyr)
+library(data.table)
 library(jsonlite)
 library(tibble)
+library(lubridate)
 
-tennis_data_raw <- read.csv("data-raw/tennis_data.csv")
+### Import all files from github
 
-tennis_data <- tennis_data_raw %>%
-  select(Location, Date, Winner, Loser) %>%
-  pivot_longer(
-    cols = c("Winner", "Loser"),
-    names_to = "win_lose",
-    values_to = "player_name"
-  ) %>%
-  mutate(
-    Year = case_when(
-      nchar(Date) == 9 ~ substr(Date, 6, 9),
-      nchar(Date) == 10 ~ substr(Date, 7, 10),
-      TRUE ~ NA_character_
-    ),
-    Year = as.numeric(Year),
-    Date = format(as.Date(Date, format = "%d/%m/%Y"), "%Y-%m-%d")
+# years <- seq(1968, 2020, 1)
+# for (i in years) {
+#   x <- read.csv(
+#     paste0("https://raw.githubusercontent.com/JeffSackmann/tennis_atp/master/atp_matches_", i, ".csv"))
+#   write.csv(x, file = paste0("data-raw/atp_matches_", i, ".csv"))
+#   remove(x)
+# }
+
+
+### Treat all files
+
+atp_files <- list.files(path = "data-raw", pattern = "atp_matches.*.csv")
+
+test <- read.csv("data-raw/atp_matches_1968.csv")
+
+tennis_data <- lapply(atp_files, function(x) {
+  
+  read.csv(paste0("data-raw/", x)) %>%
+    select(tourney_name, tourney_date, winner_name,
+           winner_ioc, loser_name, loser_ioc) %>%
+    mutate(
+      tourney_year = as.numeric(substr(tourney_date, 1, 4)),
+      tourney_date = ymd(tourney_date)
+    ) %>% 
+    relocate(tourney_year, .before = "tourney_date") %>% 
+    pivot_longer(
+      cols = c("winner_name", "loser_name"),
+      names_to = "win_lose",
+      values_to = "player_name"
+    ) %>%
+    mutate(
+      winner_ioc = ifelse(win_lose == "winner_name", winner_ioc, NA),
+      loser_ioc = ifelse(win_lose == "loser_name", loser_ioc, NA)
+    ) %>% 
+    unite(winner_ioc, loser_ioc, col = "player_iso", na.rm = T) %>%
+    select(- win_lose) 
+  
+})
+  
+tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
+  filter(
+    !grepl("Davis Cup", tourney_name),
+    !grepl("Tournament of Champions", tourney_name),
+    !grepl("ATP", tourney_name),
+    !grepl("Atp", tourney_name),
+    !grepl("Chps.", tourney_name),
+    !grepl("Challenge Cup", tourney_name),
+    !grepl("Nations Cup", tourney_name),
+    !grepl("Grand Slam Cup", tourney_name),
+    !grepl("Pepsi Grand Slam", tourney_name),
+    !grepl("Masters Dec", tourney_name)
   ) %>% 
-  select(-win_lose) %>% 
-  distinct() 
+  mutate(
+    tourney_name = gsub(" WCT", "", tourney_name),
+    tourney_name = gsub(" WTC", "", tourney_name),
+    tourney_name = gsub("WCT ", "", tourney_name),
+    tourney_name = gsub("-WCT", "", tourney_name),
+    tourney_name = gsub(" Finals", "", tourney_name),
+    tourney_name = gsub(" Masters", "", tourney_name),
+    tourney_name = gsub(" Olympics", "", tourney_name),
+    tourney_name = gsub(" 1", "", tourney_name),
+    tourney_name = gsub(" 2", "", tourney_name),
+    tourney_name = gsub("-1", "", tourney_name),
+    tourney_name = gsub("-2", "", tourney_name),
+    tourney_name = gsub(" Indoor", "", tourney_name),
+    tourney_name = gsub(" Outdoor", "", tourney_name),
+    tourney_name = gsub(" PSW", "", tourney_name),
+    tourney_name = gsub(" SPW", "", tourney_name),
+    tourney_name = gsub("Cap D'Adge", "Cap d'Agde", tourney_name),
+    tourney_name = case_when(
+      tourney_name == "US Open" ~ "New York",
+      tourney_name == "Roland Garros" ~ "Paris",
+      tourney_name == "Wimbledon" ~ "London",
+      tourney_name == "Australian Open" ~ "Melbourne",
+      tourney_name == "Djkarta" ~ "Djakarta",
+      TRUE ~ tourney_name
+    )
+  ) %>% 
+  rename("Location" = "tourney_name")
+  
 
+### Geocode the cities
 
 get_lat_long <- function(city) {
   x <- tryCatch(jsonlite::fromJSON(
@@ -36,7 +101,18 @@ get_lat_long <- function(city) {
   ), error = function(e) NULL)
   
   if (!is.null(x)) {
-    x <- filter(x, importance == max(importance))
+  #   # Take the coords with the most importance
+  #   # If there are duplicates, choose the ones that are the most present
+  #   # If this is not enough, round lat and long (which are very close but not
+  #   # identical in some cases)
+    x <- x %>%
+      filter(importance == max(importance)) %>%
+      select(lon, lat) %>%
+      group_by(lon) %>%
+      mutate(n = n()) %>%
+      ungroup() %>%
+      filter(n == max(n))
+
     return(
       data.frame(
         city = city,
@@ -48,7 +124,8 @@ get_lat_long <- function(city) {
 }
 
 # Takes time
-geocodes <- sapply(unique(tennis_data$Location), get_lat_long)
+geocodes <- sapply(unique(tennis_data_2$Location), get_lat_long)
+
 
 geocodes_2 <- do.call(rbind.data.frame, geocodes) %>%
   mutate(
@@ -65,19 +142,21 @@ geocodes_2 <- do.call(rbind.data.frame, geocodes) %>%
   tibble::column_to_rownames()
 
 
+### Add geocoding data to tennis data
+
 tennis_data_geocodes <- left_join(
-  tennis_data,
+  tennis_data_2,
   geocodes_2,
   by = c("Location" = "city")
 ) %>%
-  arrange(player_name, Date) %>% 
-  select(-Date) %>% 
-  group_by(player_name, Year) %>% 
+  arrange(player_name, tourney_date) %>% 
+  select(-tourney_date) %>% 
+  group_by(player_name, tourney_year) %>% 
   distinct() %>% 
   mutate(order = row_number()) %>% 
   ungroup() %>% 
   mutate(
-    player_name = trimws(player_name, which = "right", whitespace = "[ \t\r\n]")
+    player_name = trimws(player_name, which = "both", whitespace = "[ \t\r\n]")
   )
 
 usethis::use_data(tennis_data_geocodes, overwrite = TRUE)

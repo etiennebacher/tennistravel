@@ -15,6 +15,10 @@
   color: white;
 }
 
+.summary-home {
+  color: white;
+}
+
 #wellp-home {
   opacity: 1;
   background: rgba(0, 100, 255, 0.3)

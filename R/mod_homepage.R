@@ -28,16 +28,19 @@ mod_homepage_ui <- function(id){
           br(),
           cus_p("The ATP (Association of Tennis Professionals) Tour takes place all over the world. We can divide in more or less 9 periods:"),
           withTags(
-            cus_ul(
-              cus_li("January: Oceania round (Auckland, Sidney, Brisbane, and most importantly ", cus_b("Melbourne (Australian Open);")),
-              cus_li("February: transition round (Dubai, Rotterdam, Mexico, Buenos Aires)"),
-              cus_li("March: first US round (Indian Wells, Miami)"),
-              cus_li("April - June: clay round (Monte Carlo, Barcelona, Madrid, Rome, and most importantly ", cus_b("Roland Garros;")),
-              cus_li("June - July: grass round (Queens, Halle, and most importantly ", cus_b("Wimbledon;")),
-              cus_li("July: transition round (Newport, Hamburg, Atlanta);"),
-              cus_li("August - September: North American round (Cincinnati, Montréal/Toronto, and most importantly", cus_b("Flushing Meadows (US Open);")),
-              cus_li("September - October: Asian round (Beijing, Tokyo, Shanghai);"),
-              cus_li("October - November: European round (Basel, Stockholm, Paris-Bercy, and most importantly the", cus_b("Masters in London;"))
+            details(
+              summary("More details on the ATP Tour", class = "summary-home"),
+              cus_ul(
+                cus_li("January: Oceania round (Auckland, Sidney, Brisbane, and most importantly ", cus_b("Melbourne (Australian Open);")),
+                cus_li("February: transition round (Dubai, Rotterdam, Mexico, Buenos Aires)"),
+                cus_li("March: first US round (Indian Wells, Miami)"),
+                cus_li("April - June: clay round (Monte Carlo, Barcelona, Madrid, Rome, and most importantly ", cus_b("Roland Garros;")),
+                cus_li("June - July: grass round (Queens, Halle, and most importantly ", cus_b("Wimbledon;")),
+                cus_li("July: transition round (Newport, Hamburg, Atlanta);"),
+                cus_li("August - September: North American round (Cincinnati, Montréal/Toronto, and most importantly", cus_b("Flushing Meadows (US Open);")),
+                cus_li("September - October: Asian round (Beijing, Tokyo, Shanghai);"),
+                cus_li("October - November: European round (Basel, Stockholm, Paris-Bercy, and most importantly the", cus_b("Masters in London;"))
+              )
             )
           ),
           withTags(

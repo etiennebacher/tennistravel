@@ -23,7 +23,8 @@ tennis_players <-
     country_name = countrycode(country_iso, "ioc", "country.name"),
     birth_date = lubridate::ymd(birth_date),
     abb_name = paste0(last_name, " ", substr(first_name, 1, 1), ".")
-  ) 
+  ) %>% 
+  unite(first_name, last_name, col = "full_name", sep = " ", na.rm = T)
   
 list_flags <- emo::jis %>%
   filter(group == "Flags") %>% 

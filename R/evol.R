@@ -7,18 +7,18 @@
 #'
 evol_dist <- function(player) {
   
-  get_tennis_data() %>% 
+  tennis_data %>% 
     filter(grepl(paste(player, collapse="|"), player_name)) %>% 
-    select(player_name, Year, contains(c("_d", "_a"))) %>% 
+    select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
     mutate(
       dist = custom_dist(lat_d, long_d, lat_a, long_a),
-      Year = factor(Year)
+      tourney_year = factor(tourney_year)
     ) %>% 
     select(-contains(c("_a", "_d"))) %>% 
-    group_by(player_name, Year) %>% 
+    group_by(player_name, tourney_year) %>% 
     summarise(dist = sum(dist, na.rm = T)) %>% 
     ungroup() %>% 
-    arrange(player_name, Year)
+    arrange(player_name, tourney_year)
   
 }
 
@@ -31,20 +31,20 @@ evol_dist <- function(player) {
 #'
 evol_footprint <- function(player, flightClass = "Unknown", output = "co2e") {
   
-  get_tennis_data() %>% 
+  tennis_data %>% 
     filter(grepl(paste(player, collapse="|"), player_name)) %>% 
-    select(player_name, Year, contains(c("_d", "_a"))) %>% 
+    select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
     mutate(
       footprint = custom_footprint(lat_d, long_d, lat_a, long_a,
                                    flightClass = flightClass,
                                    output = output),
-      Year = factor(Year)
+      tourney_year = factor(tourney_year)
     ) %>% 
     select(-contains(c("_a", "_d"))) %>% 
-    group_by(player_name, Year) %>% 
+    group_by(player_name, tourney_year) %>% 
     summarise(footprint = sum(footprint, na.rm = T)) %>% 
     ungroup() %>% 
-    arrange(player_name, Year)
+    arrange(player_name, tourney_year)
   
 }
 
@@ -71,10 +71,10 @@ plot_evol <- function(player, indicator) {
   }
   
   data_type %>%
-    complete(player_name, Year) %>% 
+    complete(player_name, tourney_year) %>% 
     group_by(player_name) %>% 
     arrange(indicator) %>% 
-    e_charts(Year) %>%
+    e_charts(tourney_year) %>%
     e_line_(indicator) %>% 
     e_legend(show = FALSE) %>%
     e_title(text =  plot_title)

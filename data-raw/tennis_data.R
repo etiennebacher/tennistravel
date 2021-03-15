@@ -36,6 +36,13 @@ tennis_data <- tennis_data %>%
   left_join(
     flags,
     by = c("player_iso" = "country_iso")
-  ) 
+  ) %>% 
+  ungroup() %>% 
+  filter(!is.na(lat_d), !is.na(long_d), 
+           !is.na(lat_a), !is.na(long_a)) %>% 
+  mutate(
+    dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a),
+    footprint_per_tourn = custom_footprint(lat_d, long_d, lat_a, long_a)
+  )
 
 write.csv(tennis_data, file = "data/tennis_data.csv")

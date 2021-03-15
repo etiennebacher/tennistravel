@@ -10,6 +10,7 @@
 #' @return A numeric value
 #'
 
+# Used in data-raw scripts
 custom_dist <- function(
   departure_lat,
   departure_long,
@@ -26,6 +27,7 @@ custom_dist <- function(
     90 && arrival_lat <= 90)) {
     stop("Latitude must be numeric and has values between -90 and 90")
   }
+  
   lon1 <- departure_long * pi / 180
   lat1 <- departure_lat * pi / 180
   lon2 <- arrival_long * pi / 180
@@ -56,9 +58,6 @@ dist_player_year <- function(player, year) {
     return(0)
   
   complete_dist <- data_filtered %>%
-    mutate(
-      dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a)
-    ) %>%
     pull(dist_per_tourn) %>%
     sum(., na.rm = T)
   

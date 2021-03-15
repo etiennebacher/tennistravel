@@ -84,6 +84,7 @@ tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
       tourney_name == "Wimbledon" ~ "London",
       tourney_name == "Australian Open" ~ "Melbourne",
       tourney_name == "Djkarta" ~ "Djakarta",
+      tourney_name == "s Hertogenbosch" ~ "'s-Hertogenbosch",
       TRUE ~ tourney_name
     )
   ) %>% 

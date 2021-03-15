@@ -10,6 +10,8 @@
 #' @return
 #' @export
 #'
+
+# Used in data-raw scripts
 custom_footprint <- function(
   departure_lat,
   departure_long,
@@ -56,9 +58,6 @@ footprint_player_year <- function(player, year, output = "co2e") {
     return(0)
 
   complete_footprint <- data_filtered %>%
-    mutate(
-      footprint_per_tourn = custom_footprint(lat_d, long_d, lat_a, long_a)
-    ) %>%
     pull(footprint_per_tourn) 
   
   return(

@@ -100,6 +100,7 @@ tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
       tourney_location == "Australian Open" ~ "Melbourne",
       tourney_location == "Djkarta" ~ "Djakarta",
       tourney_location == "s Hertogenbosch" ~ "'s-Hertogenbosch",
+      tourney_location == "St. Petersburg" ~ "Saint Petersburg",
       tourney_location == "Masters" & tourney_year == 1970 ~ "Tokyo",
       tourney_location == "Masters" & tourney_year == 1971 ~ "Paris",
       tourney_location == "Masters" & tourney_year == 1972 ~ "Barcelona",

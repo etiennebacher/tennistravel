@@ -5,24 +5,17 @@
 #' @import shiny fullPage pushbar
 #' @noRd
 app_ui <- function(request) {
-  tagList(
+  fluidPage(
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    fullPage(
-      opts = list(
-        normalScrollElements = "*"
-      ),
-      fullSection(
-        mod_homepage_ui("homepage_ui_1"),
-        fullSlide(
-          center = TRUE,
-          menu = NULL,
-          tags$h1("Hi"),
-          fullButtonLeft("Move left", outline = TRUE)
-        )
-      )
-    )
+    longdiv(),
+    column(width = 3),
+    column(width = 6,
+           mod_homepage_ui("homepage_ui_1"),
+           mod_atp_calendar_ui("atp_calendar_ui_1")
+    ),
+    column(width = 3)
   )
 }
 
@@ -46,9 +39,13 @@ golem_add_external_resources <- function(){
       path = app_sys('app/www'),
       app_title = 'tennistravel'
     ),
-    # Add here other external resources
-    # for example, you can add shinyalert::useShinyalert() 
-    textyle::use_textyle(),
+    # Add here other external resources for example, you can add
+    # shinya?lert::useShinyalert()
+    gotop::use_gotop(
+      color = "white",
+      opacity = 0.9,
+      width = 60
+    ),
     pushbar::pushbar_deps()
   )
 }

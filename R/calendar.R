@@ -14,7 +14,7 @@ tournament_calendar <- function(year) {
                    "November", "December")
   
   plot_title <- lapply(month_names, function(x) {
-    list(text = paste0(x, " ", year), left = "45%")
+    list(text = paste0(x, " ", year), left = "40%", color = "white")
   })
   
   tennis_data %>% 
@@ -32,7 +32,7 @@ tournament_calendar <- function(year) {
     e_geo(
       roam = TRUE, 
       itemStyle = list(
-        color = '#007b22', 
+        color = '#003399', 
         borderColor = "#fff")
     ) %>% 
     e_scatter(
@@ -58,15 +58,15 @@ tournament_calendar <- function(year) {
       top = "90%",
       autoPlay = FALSE,
       symbol = "roundRect",
-      lineStyle = list(color = "#007b22"),
-      itemStyle = list(color = "#007b22"),
-      controlStyle = list(color = "#007b22"),
+      lineStyle = list(color = "#003399"),
+      itemStyle = list(color = "#003399"),
+      controlStyle = list(color = "#003399"),
       checkpointStyle = list(color = "yellow",
                              symbol = "roundRect"),
-      progress = list(lineStyle = list(color = "#007b22"),
-                      itemStyle = list(color = "#007b22")),
-      emphasis = list(itemStyle = list(color = "#007b22"),
-                      controlStyle = "#007b22"),
+      progress = list(lineStyle = list(color = "#003399"),
+                      itemStyle = list(color = "#003399")),
+      emphasis = list(itemStyle = list(color = "#003399"),
+                      controlStyle = "#003399"),
       label = list(show = FALSE)) %>% 
     e_timeline_serie(title = plot_title)
   

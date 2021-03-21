@@ -1,4 +1,21 @@
+#' Show the location of tournaments month per month for a given year
+#'
+#' @param year Year 
+#'
+#' @return A plot
+#' @export
+#'
+
 tournament_calendar <- function(year) {
+  
+  month_names <- c("January", "February", "March",
+                   "April", "May", "June", "July", 
+                   "August", "September", "October", 
+                   "November", "December")
+  
+  plot_title <- lapply(month_names, function(x) {
+    list(text = paste0(x, " ", year), left = "45%")
+  })
   
   tennis_data %>% 
     filter(tourney_year == year) %>% 
@@ -8,16 +25,25 @@ tournament_calendar <- function(year) {
     mutate(
       tourney_month = month.name[tourney_month],
       tourney_month = factor(tourney_month, 
-                             levels = c("January", "February", "March",
-                                        "April", "May", "June", "July", 
-                                        "August", "September", "October", 
-                                        "November", "December"))
+                             levels = month_names)
     ) %>% 
     group_by(tourney_month) %>% 
     e_charts(long, timeline = T) %>% 
-    e_geo(roam = TRUE) %>% 
-    e_scatter(lat, coord_system = "geo", symbol_size = 8,
-              bind = tourney_location) %>% 
+    e_geo(
+      roam = TRUE, 
+      itemStyle = list(
+        color = '#007b22', 
+        borderColor = "#fff")
+    ) %>% 
+    e_scatter(
+      lat, 
+      coord_system = "geo", 
+      symbol_size = 15,
+      bind = tourney_location, 
+      itemStyle = list(
+        color = "yellow", 
+        borderColor = "#000")
+    ) %>% 
     e_legend(show = F) %>% 
     e_tooltip(
       trigger = "item",
@@ -27,7 +53,21 @@ tournament_calendar <- function(year) {
           params.name
         )
       }
-   ")
-    )
+   ")) %>% 
+    e_timeline_opts(
+      top = "90%",
+      autoPlay = FALSE,
+      symbol = "roundRect",
+      lineStyle = list(color = "#007b22"),
+      itemStyle = list(color = "#007b22"),
+      controlStyle = list(color = "#007b22"),
+      checkpointStyle = list(color = "yellow",
+                             symbol = "roundRect"),
+      progress = list(lineStyle = list(color = "#007b22"),
+                      itemStyle = list(color = "#007b22")),
+      emphasis = list(itemStyle = list(color = "#007b22"),
+                      controlStyle = "#007b22"),
+      label = list(show = FALSE)) %>% 
+    e_timeline_serie(title = plot_title)
   
 }

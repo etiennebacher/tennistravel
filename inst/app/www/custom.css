@@ -5,7 +5,18 @@ body {
   background-attachment: fixed;
 }
 
-#arrowndown {
+.arrow {
+  border: solid white;
+  border-width: 0 5px 5px 0;
+  display: inline-block;
+  padding: 1.5rem;
+  text-align: center;
+}
+.down {
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+}
+#arrowdown {
   background-image: linear-gradient(transparent 10%, currentColor 30%, currentColor 70%, transparent 90%);
 	-webkit-background-clip: text;
   background-clip: text;

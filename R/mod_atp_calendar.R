@@ -30,7 +30,7 @@ mod_atp_calendar_ui <- function(id){
       br(),
       echarts4r::echarts4rOutput(ns("plot_calendar"))
     ),
-    longdiv2()
+    longdiv(65)
   )
 }
     

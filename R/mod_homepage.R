@@ -15,12 +15,13 @@ mod_homepage_ui <- function(id){
           style = "text-align: center; color: white;"
       )
     ),
-    longdiv2(),
+    longdiv(30),
     fluidRow(
       column(5),
-      column(2, div(id = "arrowdown", shiny::icon("arrow-down"))),
+      column(2, tags$i(id = "arrowdown", class="arrow down")),
       column(5)
-    )
+    ),
+    longdiv(35)
   )
 }
     

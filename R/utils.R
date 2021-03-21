@@ -14,11 +14,8 @@ cus_li <- function(...) {
 cus_b <- function(...) {
   shiny::tags$b(..., class = "text")
 }
-longdiv <- function(...){
-  shiny::tags$div(style = "min-height:30vh;", ...)
-}
-longdiv2 <- function(...){
-  shiny::tags$div(style = "min-height:65vh;", ...)
+longdiv <- function(x, ...){
+  shiny::tags$div(style = paste0("min-height:", x, "vh;"), ...)
 }
 wellPanel2 <- function(...) {
   shiny::wellPanel(

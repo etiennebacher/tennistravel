@@ -9,7 +9,7 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    longdiv(),
+    longdiv(35),
     column(width = 3),
     column(width = 6,
            mod_homepage_ui("homepage_ui_1"),
@@ -44,7 +44,8 @@ golem_add_external_resources <- function(){
     gotop::use_gotop(
       color = "white",
       opacity = 0.9,
-      width = 60
+      width = 60,
+      appear = 400
     ),
     pushbar::pushbar_deps()
   )

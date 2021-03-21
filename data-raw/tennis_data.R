@@ -9,8 +9,8 @@ load("data/tennis_players.rda")
 tennis_data <- tennis_data_geocodes %>% 
   group_by(player_name, tourney_year) %>% 
   mutate(
-    departure = Location,
-    arrival = lead(Location),
+    departure = tourney_location,
+    arrival = lead(tourney_location),
     arrival = ifelse(is.na(arrival), "End of year", arrival),
     lat_d = lat,
     long_d = long,
@@ -45,4 +45,4 @@ tennis_data <- tennis_data %>%
     footprint_per_tourn = custom_footprint(lat_d, long_d, lat_a, long_a)
   )
 
-write.csv(tennis_data, file = "data/tennis_data.csv")
+usethis::use_data(tennis_data, overwrite = T)

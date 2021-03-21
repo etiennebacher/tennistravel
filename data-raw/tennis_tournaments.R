@@ -18,11 +18,22 @@ library(lubridate)
 # }
 
 
+### Utils
+
+is_even <- function(x) {
+  sapply(x, function(y) {
+    if((y %% 2) == 0) {
+      TRUE
+    } else {
+      FALSE
+    }
+  })
+}
+
+
 ### Treat all files
 
 atp_files <- list.files(path = "data-raw", pattern = "atp_matches.*.csv")
-
-test <- read.csv("data-raw/atp_matches_1968.csv")
 
 tennis_data <- lapply(atp_files, function(x) {
   
@@ -31,6 +42,7 @@ tennis_data <- lapply(atp_files, function(x) {
            winner_ioc, loser_name, loser_ioc) %>%
     mutate(
       tourney_year = as.numeric(substr(tourney_date, 1, 4)),
+      tourney_month = as.numeric(substr(tourney_date, 5, 6)),
       tourney_date = ymd(tourney_date)
     ) %>% 
     relocate(tourney_year, .before = "tourney_date") %>% 
@@ -62,33 +74,53 @@ tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
     !grepl("Masters Dec", tourney_name)
   ) %>% 
   mutate(
-    tourney_name = gsub(" WCT", "", tourney_name),
-    tourney_name = gsub(" WTC", "", tourney_name),
-    tourney_name = gsub("WCT ", "", tourney_name),
-    tourney_name = gsub("-WCT", "", tourney_name),
-    tourney_name = gsub(" Finals", "", tourney_name),
-    tourney_name = gsub(" Masters", "", tourney_name),
-    tourney_name = gsub(" Olympics", "", tourney_name),
-    tourney_name = gsub(" 1", "", tourney_name),
-    tourney_name = gsub(" 2", "", tourney_name),
-    tourney_name = gsub("-1", "", tourney_name),
-    tourney_name = gsub("-2", "", tourney_name),
-    tourney_name = gsub(" Indoor", "", tourney_name),
-    tourney_name = gsub(" Outdoor", "", tourney_name),
-    tourney_name = gsub(" PSW", "", tourney_name),
-    tourney_name = gsub(" SPW", "", tourney_name),
-    tourney_name = gsub("Cap D'Adge", "Cap d'Agde", tourney_name),
-    tourney_name = case_when(
-      tourney_name == "US Open" ~ "New York",
-      tourney_name == "Roland Garros" ~ "Paris",
-      tourney_name == "Wimbledon" ~ "London",
-      tourney_name == "Australian Open" ~ "Melbourne",
-      tourney_name == "Djkarta" ~ "Djakarta",
-      tourney_name == "s Hertogenbosch" ~ "'s-Hertogenbosch",
-      TRUE ~ tourney_name
+    tourney_name = ifelse(tourney_name == "Tour Finals", "Masters", tourney_name),
+    tourney_name = ifelse(tourney_name == "Masters Cup", "Masters", tourney_name),
+    tourney_location = tourney_name,
+    tourney_location = gsub(" WCT", "", tourney_location),
+    tourney_location = gsub(" WTC", "", tourney_location),
+    tourney_location = gsub("WCT ", "", tourney_location),
+    tourney_location = gsub("-WCT", "", tourney_location),
+    tourney_location = gsub(" Finals", "", tourney_location),
+    tourney_location = gsub(" Masters", "", tourney_location),
+    tourney_location = gsub(" Olympics", "", tourney_location),
+    tourney_location = gsub(" 1", "", tourney_location),
+    tourney_location = gsub(" 2", "", tourney_location),
+    tourney_location = gsub("-1", "", tourney_location),
+    tourney_location = gsub("-2", "", tourney_location),
+    tourney_location = gsub(" Indoor", "", tourney_location),
+    tourney_location = gsub(" Outdoor", "", tourney_location),
+    tourney_location = gsub(" PSW", "", tourney_location),
+    tourney_location = gsub(" SPW", "", tourney_location),
+    tourney_location = gsub("Cap D'Adge", "Cap d'Agde", tourney_location),
+    tourney_location = case_when(
+      tourney_location == "US Open" ~ "New York",
+      tourney_location == "Roland Garros" ~ "Paris",
+      tourney_location == "Wimbledon" ~ "London",
+      tourney_location == "Australian Open" ~ "Melbourne",
+      tourney_location == "Djkarta" ~ "Djakarta",
+      tourney_location == "s Hertogenbosch" ~ "'s-Hertogenbosch",
+      tourney_location == "Masters" & tourney_year == 1970 ~ "Tokyo",
+      tourney_location == "Masters" & tourney_year == 1971 ~ "Paris",
+      tourney_location == "Masters" & tourney_year == 1972 ~ "Barcelona",
+      tourney_location == "Masters" & tourney_year == 1973 ~ "Boston",
+      tourney_location == "Masters" & tourney_year == 1974 ~ "Melbourne",
+      tourney_location == "Masters" & tourney_year == 1975 ~ "Stockholm",
+      tourney_location == "Masters" & tourney_year == 1976 ~ "Houston",
+      tourney_location == "Masters" & between(tourney_year, 1977, 1989) ~ "New York",
+      tourney_location == "Masters" & between(tourney_year, 1990, 1995) ~ "Frankfurt",
+      tourney_location == "Masters" & between(tourney_year, 1996, 1999) ~ "Hanover",
+      tourney_location == "Masters" & tourney_year == 2000 ~ "Lisbon",
+      tourney_location == "Masters" & tourney_year == 2001 ~ "Sidney",
+      tourney_location == "Masters" & tourney_year == 2002 ~ "Shanghai",
+      tourney_location == "Masters" & between(tourney_year, 2003, 2004) ~ "Houston",
+      tourney_location == "Masters" & between(tourney_year, 2005, 2008) ~ "Shanghai",
+      tourney_location == "Masters" & between(tourney_year, 2009, 2020) ~ "London",
+      tourney_location == "Canada" & is_even(tourney_year)  ~ "Montréal",
+      tourney_location == "Canada" & !is_even(tourney_year)  ~ "Toronto",
+      TRUE ~ tourney_location
     )
-  ) %>% 
-  rename("Location" = "tourney_name")
+  )
   
 
 ### Geocode the cities
@@ -125,7 +157,7 @@ get_lat_long <- function(city) {
 }
 
 # Takes time
-geocodes <- sapply(unique(tennis_data_2$Location), get_lat_long)
+geocodes <- sapply(unique(tennis_data_2$tourney_location), get_lat_long)
 
 
 geocodes_2 <- do.call(rbind.data.frame, geocodes) %>%
@@ -148,7 +180,7 @@ geocodes_2 <- do.call(rbind.data.frame, geocodes) %>%
 tennis_data_geocodes <- left_join(
   tennis_data_2,
   geocodes_2,
-  by = c("Location" = "city")
+  by = c("tourney_location" = "city")
 ) %>%
   arrange(player_name, tourney_date) %>% 
   select(-tourney_date) %>% 

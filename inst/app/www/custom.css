@@ -22,7 +22,7 @@ body {
   background-clip: text;
   background-attachment: fixed;
 }
-#arrowndown > * {
+#arrowdown > * {
   color: white;
 }
 
@@ -43,5 +43,33 @@ body {
 #wellp {
   opacity: 1;
   background: rgba(0, 100, 255, 0.3)
+}
+
+/* Style for dropdown */
+.dropdown-item {
+  background-color: #003399;
+}
+.dropdown-item:hover {
+  background-color: #ccddff;
+}
+.dropdown-item.active.selected {
+  background-color: #3377ff;
+}
+.dropdown-menu.open {
+  background-color: #003399;
+}
+.btn.dropdown-toggle.btn-default {
+  background-color: #3377ff;
+  color: white;
+}
+.btn.dropdown-toggle.btn-default:hover {
+  background-color: #6699ff;
+  color: white;
+}
+
+/* Countup numbers */
+
+.countup.html-widget.html-widget-output.shiny-bound-output {
+  color: white;
 }
 

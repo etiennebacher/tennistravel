@@ -68,6 +68,7 @@ tournament_calendar <- function(year) {
       emphasis = list(itemStyle = list(color = "#003399"),
                       controlStyle = "#003399"),
       label = list(show = FALSE)) %>% 
-    e_timeline_serie(title = plot_title)
+    e_timeline_serie(title = plot_title) %>% 
+    e_title(textStyle = list(color = "#fff"))
   
 }

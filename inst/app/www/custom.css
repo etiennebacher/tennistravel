@@ -71,5 +71,24 @@ body {
 
 .countup.html-widget.html-widget-output.shiny-bound-output {
   color: white;
+  font-size: 3em;
+}
+
+/* Buttons */
+
+.btn-default {
+  background-color: #3377ff;
+  color: white;
+}
+.btn-default:hover {
+  background-color: #6699ff;
+  color: white;
+}
+#compare {
+  -moz-transform:rotate(90deg);
+  -ms-transform:rotate(90deg);
+  -o-transform:rotate(90deg);
+  -webkit-transform:rotate(90deg);
+  transform-origin: 23% -40%;
 }
 

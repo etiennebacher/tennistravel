@@ -45,22 +45,7 @@ mod_player_card_ui <- function(id){
           )
         )
       ),
-      fluidRow(
-        column(5),
-        column(
-          2,
-          shinyWidgets::actionBttn(
-            ns("run"),
-            "Go!"
-          )
-        ),
-        column(5)
-      ),
-      br(),
-      uiOutput(ns("player_card")),
-      br(),
-      countup::countupOutput(ns("count_distance")),
-      countup::countupOutput(ns("count_footprint")),
+      shiny::uiOutput(ns("ui_player")),
       longdiv(65)
     )
   )
@@ -71,6 +56,27 @@ mod_player_card_ui <- function(id){
 #' @noRd 
 mod_player_card_server <- function(input, output, session){
   ns <- session$ns
+  
+  output$ui_player <- shiny::renderUI({
+    tagList(
+      fluidRow(
+        column(5),
+        column(
+          2,
+          shiny::actionButton(
+            ns("run"),
+            "Go!"
+          )
+        ),
+        column(5)
+      ),
+      br(),
+      uiOutput(ns("player_card")),
+      br(),
+      countup::countupOutput(ns("count_distance")),
+      countup::countupOutput(ns("count_footprint"))
+    )
+  })
  
   observeEvent(input$player, {
     shinyWidgets::updatePickerInput(

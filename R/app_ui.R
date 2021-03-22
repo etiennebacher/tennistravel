@@ -9,28 +9,14 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    fluidRow(
-      longdiv(35),
-      column(width = 3),
-      column(width = 6,
-             mod_homepage_ui("homepage_ui_1"),
-             mod_atp_calendar_ui("atp_calendar_ui_1")
-      ),
-      column(width = 3)
+    longdiv(35),
+    column(width = 3),
+    column(width = 6,
+           mod_homepage_ui("homepage_ui_1"),
+           mod_atp_calendar_ui("atp_calendar_ui_1"),
+           mod_player_card_ui("player_card_ui_1")
     ),
-    fluidRow(
-      column(width = 3),
-      column(width = 6,
-             mod_player_card_ui("player_card_ui_1")
-      ),
-      column(width = 3,
-             longdiv(50),
-             shiny::actionButton(
-               "compare",
-               "Compare"
-             )
-      )
-    )
+    column(width = 3)
   )
 }
 

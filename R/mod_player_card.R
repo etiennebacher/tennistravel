@@ -45,20 +45,6 @@ mod_player_card_ui <- function(id){
           )
         )
       ),
-      shiny::uiOutput(ns("ui_player")),
-      longdiv(65)
-    )
-  )
-}
-    
-#' player_card Server Function
-#'
-#' @noRd 
-mod_player_card_server <- function(input, output, session){
-  ns <- session$ns
-  
-  output$ui_player <- shiny::renderUI({
-    tagList(
       fluidRow(
         column(5),
         column(
@@ -72,33 +58,82 @@ mod_player_card_server <- function(input, output, session){
       ),
       br(),
       uiOutput(ns("player_card")),
-      br(),
-      countup::countupOutput(ns("count_distance")),
-      countup::countupOutput(ns("count_footprint"))
+      longdiv(65)
     )
-  })
+  )
+}
+    
+#' player_card Server Function
+#'
+#' @noRd 
+mod_player_card_server <- function(input, output, session){
+  ns <- session$ns
  
-  observeEvent(input$player, {
+  filtered_data <- reactive({
+    req(input$player)
+    tennis_data %>% 
+      filter(player_name == input$player)
+  }) 
+  
+  observe({
+    req(filtered_data())
     shinyWidgets::updatePickerInput(
       session,
       "year",
-      choices = tennis_data %>% 
-        filter(player_name == input$player) %>% 
+      choices = filtered_data() %>% 
         pull(tourney_year) %>% 
         unique
     )
   })
   
   observeEvent(input$run, {
+    output$player_card <- renderUI({
+      req(filtered_data(), input$year, input$player)
+      tagList(
+        br(),
+        wellPanel2(
+          fluidRow(
+            column(2, 
+                   div(
+                     textOutput(ns("flag")),
+                     id = "pl_flag"
+                    )
+            ),
+            column(10, 
+                   div(
+                     textOutput(ns("name")),
+                     id = "pl_name"
+                   )
+            )
+          ),
+          countup::countupOutput(ns("count_distance"))
+        )
+      )
+    })
+    output$flag <- renderText({
+      filtered_data() %>%
+        pull(flag) %>%
+        unique
+    })
+    output$name <- renderText({
+      filtered_data() %>%
+        pull(player_name) %>%
+        unique
+    })
     output$count_distance <- countup::renderCountup({
       countup::countup(
         dist_player_year(input$player, input$year),
         options = list(
-          suffix = ' km' 
+          suffix = ' km'
         )
       )
     })
   })
+  
+  
+  # observeEvent(input$run, {
+
+  # })
   
 }
     

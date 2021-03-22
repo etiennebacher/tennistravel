@@ -84,11 +84,14 @@ body {
   background-color: #6699ff;
   color: white;
 }
-#compare {
-  -moz-transform:rotate(90deg);
-  -ms-transform:rotate(90deg);
-  -o-transform:rotate(90deg);
-  -webkit-transform:rotate(90deg);
-  transform-origin: 23% -40%;
-}
 
+/* Player card */
+
+#pl_flag {
+  font-size: 6em;
+}
+#pl_name {
+  font-size: 4em;
+  color: white;
+  padding-top: 19px;
+}

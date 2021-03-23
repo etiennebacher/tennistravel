@@ -57,9 +57,9 @@ mod_player_card_ui <- function(id){
         column(5)
       ),
       br(),
-      uiOutput(ns("player_card")),
-      longdiv(65)
-    )
+      uiOutput(ns("player_card"))
+    ),
+    longdiv(65)
   )
 }
     
@@ -106,7 +106,36 @@ mod_player_card_server <- function(input, output, session){
                    )
             )
           ),
-          countup::countupOutput(ns("count_distance"))
+          fluidRow(
+            column(
+              8, 
+              shiny::tags$span(
+                p("Distance", id = "dist_label"), 
+                p("(km)", id = "dist_label_2"),
+                p(": ", id = "dist_label")
+              )
+            ), 
+            column(4, countup::odometerOutput(ns("count_distance")))
+          ),
+          br(),
+          fluidRow(
+            column(8, p("Carbon footprint", id = "carb_label"),
+                   p("(kg of CO2)", id = "carb_label_2"),
+                   p(": ", id = "carb_label")), 
+            column(4, countup::odometerOutput(ns("count_footprint")))
+          ),
+          fluidRow(
+            column(5),
+            column(
+              2,
+              actionButton(ns("see_evol"), icongram::igram("line-chart", "clarity")) %>% 
+                prompter::add_prompt(
+                  position = "bottom",
+                  message = "Click to see the evolution for this player"
+                )
+            ),
+            column(5)
+          )
         )
       )
     })
@@ -120,20 +149,13 @@ mod_player_card_server <- function(input, output, session){
         pull(player_name) %>%
         unique
     })
-    output$count_distance <- countup::renderCountup({
-      countup::countup(
-        dist_player_year(input$player, input$year),
-        options = list(
-          suffix = ' km'
-        )
-      )
+    output$count_distance <- countup::renderOdometer({
+      countup::odometer(dist_player_year(input$player, input$year))
+    })
+    output$count_footprint <- countup::renderOdometer({
+      countup::odometer(footprint_player_year(input$player, input$year))
     })
   })
-  
-  
-  # observeEvent(input$run, {
-
-  # })
   
 }
     

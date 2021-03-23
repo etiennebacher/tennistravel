@@ -16,7 +16,8 @@ Imports:
     fullPage,
     textyle,
     gotop,
-    countup
+    countup,
+    prompter
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

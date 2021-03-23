@@ -67,13 +67,6 @@ body {
   color: white;
 }
 
-/* Countup numbers */
-
-.countup.html-widget.html-widget-output.shiny-bound-output {
-  color: white;
-  font-size: 3em;
-}
-
 /* Buttons */
 
 .btn-default {
@@ -94,4 +87,29 @@ body {
   font-size: 4em;
   color: white;
   padding-top: 19px;
+}
+#dist_label, #carb_label{
+  font-size: 2.7em;
+  color: white;
+  display: inline;
+}
+#dist_label_2, #carb_label_2{
+  font-size: 1em;
+  color: white;
+  display: inline;
+}
+.odometer.html-widget.html-widget-output.shiny-bound-output {
+  color: white;
+  font-size: 2.7em;
+}
+#player_card_ui_1-see_evol {
+  height: 2.5em;
+  width: 5em;
+  text-align: center
+}
+.can-badge.can-alert.has-solid {
+  height: 3em;
+  width: 4em;
+  padding-bottom: 0.7em;
+  padding-right: 0.7em;
 }

@@ -42,6 +42,7 @@ golem_add_external_resources <- function(){
     ),
     # Add here other external resources for example, you can add
     # shinya?lert::useShinyalert()
+    prompter::use_prompt(),
     gotop::use_gotop(
       color = "white",
       opacity = 0.9,

@@ -104,12 +104,7 @@ body {
 }
 #player_card_ui_1-see_evol {
   height: 2.5em;
-  width: 5em;
+  width: 9em;
   text-align: center
 }
-.can-badge.can-alert.has-solid {
-  height: 3em;
-  width: 4em;
-  padding-bottom: 0.7em;
-  padding-right: 0.7em;
-}
+

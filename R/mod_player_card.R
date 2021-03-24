@@ -124,15 +124,13 @@ mod_player_card_server <- function(input, output, session){
                    p(": ", id = "carb_label")), 
             column(4, countup::odometerOutput(ns("count_footprint")))
           ),
+          br(),
           fluidRow(
             column(5),
             column(
               2,
-              actionButton(ns("see_evol"), icongram::igram("line-chart", "clarity")) %>% 
-                prompter::add_prompt(
-                  position = "bottom",
-                  message = "Click to see the evolution for this player"
-                )
+              actionButton(ns("see_evol"), "Evolution", 
+                           icon = shiny::icon("line-chart"))
             ),
             column(5)
           )

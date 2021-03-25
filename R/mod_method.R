@@ -12,7 +12,6 @@ mod_method_ui <- function(id){
   tagList(
     wellPanel2(
       h2("Methodology", style = "text-align: center; color: white;"),
-      br(),
       h3("Distance", style = "color: white;"),
       hr(style = "color: white;"),
       br(),

@@ -108,3 +108,11 @@ body {
   text-align: center
 }
 
+
+/* Credits panel */
+
+#credits_ui_1-see_source {
+  height: 2.5em;
+  width: 9em;
+  text-align: center
+}

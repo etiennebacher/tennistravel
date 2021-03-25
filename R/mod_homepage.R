@@ -13,7 +13,8 @@ mod_homepage_ui <- function(id){
     wellPanel2(
       h1("What is the carbon footprint of tennis players?",
           style = "text-align: center; color: white;"
-      )
+      ) %>% 
+        vov::fade_in(duration = "slow")
     ),
     longdiv(30),
     fluidRow(

@@ -32,6 +32,13 @@ mod_credits_ui <- function(id){
             "to compute the distance between two cities, and the carbon footprint",
             "corresponding to a plane trip between these two cities."),
       br(),
+      h3("Image", style = "color: white;"),
+      hr(style = "color: white;"),
+      cus_p("The image in the background comes from",
+            shiny::tags$a(href = "https://commons.wikimedia.org/wiki/File:2013_ATP_World_Tour_Finals_Berdych_vs_Ferrer.jpg",
+                          "Wikimedia Commons,"),
+            " more specifically from andrewrendell. It is under CC BY 2.0 license."),
+      br(),
       br(),
       fluidRow(
         column(5),

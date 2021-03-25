@@ -18,8 +18,17 @@ mod_player_card_ui <- function(id){
   tagList(
     wellPanel2(
       fluidRow(
+        column(2),
         column(
-          6, 
+          8,
+          cus_p('Pick a player, or let me pick for you, and click on "Go":',
+                style = "text-align: center;")
+        ),
+        column(2)
+      ),
+      fluidRow(
+        column(
+          4, 
           shinyWidgets::pickerInput(
             inputId = ns("player"),
             label = "",
@@ -35,7 +44,7 @@ mod_player_card_ui <- function(id){
           )
         ),
         column(
-          6, 
+          4, 
           shinyWidgets::pickerInput(
             inputId = ns("year"),
             label = "",
@@ -43,8 +52,18 @@ mod_player_card_ui <- function(id){
             selected = NULL,
             multiple = FALSE
           )
-        )
+        ),
+        column(1),
+        column(
+          2, 
+          actionButton(
+            ns("random_pick"),
+            "Pick for me"
+          )
+        ),
+        column(1)
       ),
+      br(),
       fluidRow(
         column(5),
         column(

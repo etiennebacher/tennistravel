@@ -13,10 +13,10 @@ mod_method_ui <- function(id){
     wellPanel2(
       h2("Methodology", style = "text-align: center; color: white;"),
       h3("Distance", style = "color: white;"),
-      hr(style = "color: white;"),
+      hr_white(),
       br(),
       h3("Carbon footprint", style = "color: white;"),
-      hr(style = "color: white;"),
+      hr_white(),
     ),
     longdiv(65)
   )

@@ -23,3 +23,6 @@ wellPanel2 <- function(...) {
     ...
   )
 }
+hr_white <- function() {
+  shiny::tags$hr(style = "color: white;")
+}

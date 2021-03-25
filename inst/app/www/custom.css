@@ -1,3 +1,8 @@
+:root {
+  --text-color: white;
+  --bg-button: #3377ff;
+}
+
 body {
   background-image: url("bg_image_blurred.png");
   background-repeat: no-repeat;
@@ -23,21 +28,21 @@ body {
   background-attachment: fixed;
 }
 #arrowdown > * {
-  color: white;
+  color: var(--text-color);
 }
 
 /* Text colors */
 
 .h1 {
-  color: white;
+  color: var(--text-color);
 }
 
 .text {
-  color: white;
+  color: var(--text-color);
 }
 
 .summary-home {
-  color: white;
+  color: var(--text-color);
 }
 
 #wellp {
@@ -53,53 +58,59 @@ body {
   background-color: #ccddff;
 }
 .dropdown-item.active.selected {
-  background-color: #3377ff;
+  background-color: var(--bg-button);
 }
 .dropdown-menu.open {
   background-color: #003399;
 }
 .btn.dropdown-toggle.btn-default {
-  background-color: #3377ff;
-  color: white;
+  background-color: var(--bg-button);
+  color: var(--text-color);
 }
 .btn.dropdown-toggle.btn-default:hover {
   background-color: #6699ff;
-  color: white;
+  color: var(--text-color);
 }
 
 /* Buttons */
 
 .btn-default {
-  background-color: #3377ff;
-  color: white;
+  background-color: var(--bg-button);
+  color: var(--text-color);
 }
 .btn-default:hover {
   background-color: #6699ff;
-  color: white;
+  color: var(--text-color);
 }
 
 /* Player card */
 
+#player_card_ui_1-random_pick {
+  margin-top : 1.4em;
+}
+#player_card_ui_1-run {
+  margin-left: 1.3em;
+}
 #pl_flag {
   font-size: 6em;
 }
 #pl_name {
   font-size: 4em;
-  color: white;
+  color: var(--text-color);
   padding-top: 19px;
 }
 #dist_label, #carb_label{
   font-size: 2.7em;
-  color: white;
+  color: var(--text-color);
   display: inline;
 }
 #dist_label_2, #carb_label_2{
   font-size: 1em;
-  color: white;
+  color: var(--text-color);
   display: inline;
 }
 .odometer.html-widget.html-widget-output.shiny-bound-output {
-  color: white;
+  color: var(--text-color);
   font-size: 2.7em;
 }
 #player_card_ui_1-see_evol {
@@ -114,5 +125,6 @@ body {
 #credits_ui_1-see_source {
   height: 2.5em;
   width: 9em;
-  text-align: center
+  text-align: center;
+  margin-left: 1.3em;
 }

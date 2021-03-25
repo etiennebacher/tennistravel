@@ -13,7 +13,7 @@ mod_credits_ui <- function(id){
     wellPanel2(
       h2("Credits", style = "text-align: center; color: white;"),
       h3("Data", style = "color: white;"),
-      hr(style = "color: white;"),
+      hr_white(),
       cus_p("This Shiny app was made possible thanks to the huge work of ", 
             shiny::tags$a(href = "http://www.jeffsackmann.com/", "Jeff Sackmann,"),
             "who compiled all ATP matches from 1968 until today on a ",
@@ -23,7 +23,7 @@ mod_credits_ui <- function(id){
             participants and the location."),
       br(),
       h3("Distance and footprint", style = "color: white;"),
-      hr(style = "color: white;"),
+      hr_white(),
       cus_p("I used or inspired from the package", 
             shiny::tags$a(href= "https://github.com/acircleda/footprint",
                           "footprint,"),
@@ -33,24 +33,27 @@ mod_credits_ui <- function(id){
             "corresponding to a plane trip between these two cities."),
       br(),
       h3("Image", style = "color: white;"),
-      hr(style = "color: white;"),
+      hr_white(),
       cus_p("The image in the background comes from",
             shiny::tags$a(href = "https://commons.wikimedia.org/wiki/File:2013_ATP_World_Tour_Finals_Berdych_vs_Ferrer.jpg",
                           "Wikimedia Commons,"),
-            " more specifically from andrewrendell. It is under CC BY 2.0 license."),
+            " more specifically from andrewrendell. It is under ",
+            shiny::tags$a(href = "https://creativecommons.org/licenses/by/2.0/",
+                          "CC BY 2.0 license.")
+          ),
       br(),
       br(),
       fluidRow(
-        column(5),
+        column(4),
         column(
-          2,
+          4,
           actionButton(
             ns("see_source"), "Source code", 
             icon = shiny::icon("github"),
             onclick ="window.open('https://github.com/etiennebacher/tennistravel/', '_blank')"
           )
         ),
-        column(5)
+        column(4)
       )
     ),
     longdiv(15)

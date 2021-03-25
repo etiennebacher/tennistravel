@@ -14,7 +14,7 @@ mod_homepage_ui <- function(id){
       h1("What is the carbon footprint of tennis players?",
           style = "text-align: center; color: white;"
       ) %>% 
-        vov::fade_in(duration = "slow")
+        vov::fade_in(duration = "slower")
     ),
     longdiv(30),
     fluidRow(

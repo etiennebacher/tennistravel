@@ -9,76 +9,12 @@
 #' @importFrom shiny NS tagList 
 mod_player_card_ui <- function(id){
   ns <- NS(id)
-  
-  for_picker <- tennis_data %>% 
-    select(player_name, player_iso, tourney_year) %>% 
-    filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
-    distinct() 
-  
+
   tagList(
-    wellPanel2(
-      fluidRow(
-        column(2),
-        column(
-          8,
-          cus_p('Pick a player, or let me pick for you, and click on "Go":',
-                style = "text-align: center;")
-        ),
-        column(2)
-      ),
-      fluidRow(
-        column(
-          4, 
-          shinyWidgets::pickerInput(
-            inputId = ns("player"),
-            label = "",
-            choices = unique(for_picker$player_name),
-            choicesOpt = list(
-              subtext = unique(for_picker$player_iso)
-            ),
-            options = list(
-              `live-search` = TRUE
-            ),
-            selected = "Roger Federer",
-            multiple = FALSE
-          )
-        ),
-        column(
-          4, 
-          shinyWidgets::pickerInput(
-            inputId = ns("year"),
-            label = "",
-            choices = NULL,
-            selected = NULL,
-            multiple = FALSE
-          )
-        ),
-        column(1),
-        column(
-          2, 
-          actionButton(
-            ns("random_pick"),
-            "Pick for me"
-          )
-        ),
-        column(1)
-      ),
-      br(),
-      fluidRow(
-        column(5),
-        column(
-          2,
-          shiny::actionButton(
-            ns("run"),
-            "Go!"
-          )
-        ),
-        column(5)
-      ),
-      br(),
-      uiOutput(ns("player_card"))
-    ),
-    longdiv(65)
+    uiOutput(ns("card")),
+    fluidRow(
+      longdiv(65)
+    )
   )
 }
     
@@ -87,7 +23,18 @@ mod_player_card_ui <- function(id){
 #' @noRd 
 mod_player_card_server <- function(input, output, session){
   ns <- session$ns
- 
+  
+  output$card <- renderUI({
+    mod_ui_card_1_ui("ui_card_1_ui_1")
+  })
+  
+  observeEvent(input[["ui_card_1_ui_1-compare"]], {
+    # output$card <- renderUI({
+    #   mod_ui_card_2_ui("ui_card_2_ui_1")
+    # })
+    htmlwidgets::JS("console.log('hello')")
+  })
+  
   filtered_data <- reactive({
     req(input$player)
     tennis_data %>% 

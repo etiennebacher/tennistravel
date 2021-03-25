@@ -9,16 +9,26 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
-    longdiv(35),
-    column(width = 3),
-    column(width = 6,
-           mod_homepage_ui("homepage_ui_1"),
-           mod_atp_calendar_ui("atp_calendar_ui_1"),
-           mod_player_card_ui("player_card_ui_1"),
-           mod_method_ui("method_ui_1"),
-           mod_credits_ui("credits_ui_1")
+    fluidRow(
+      longdiv(35),
+      column(width = 3),
+      column(width = 6,
+             mod_homepage_ui("homepage_ui_1"),
+             mod_atp_calendar_ui("atp_calendar_ui_1")
+      ),
+      column(width = 3) 
     ),
-    column(width = 3)
+    fluidRow(
+      mod_player_card_ui("player_card_ui_1")
+    ),
+    fluidRow(
+      column(width = 3),
+      column(width = 6,
+             mod_method_ui("method_ui_1"),
+             mod_credits_ui("credits_ui_1")
+      ),
+      column(width = 3) 
+    )
   )
 }
 

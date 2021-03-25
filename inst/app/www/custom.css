@@ -85,11 +85,18 @@ body {
 
 /* Player card */
 
-#player_card_ui_1-random_pick {
+#ui_card_1_ui_1-random_pick {
   margin-top : 1.4em;
 }
-#player_card_ui_1-run {
+#ui_card_1_ui_1-run {
   margin-left: 1.3em;
+}
+#ui_card_1_ui_1-compare {
+  -moz-transform:rotate(90deg);
+  -ms-transform:rotate(90deg);
+  -o-transform:rotate(90deg);
+  -webkit-transform:rotate(90deg);
+  transform-origin: -17%;
 }
 #pl_flag {
   font-size: 6em;

@@ -34,7 +34,7 @@ custom_footprint <- function(
     TRUE ~ "medium"
   )) %>% 
     left_join(footprint:::conversion_factors, by = c("value" = "distance")) %>% 
-    filter(flightclass == flightClass) %>% 
+    dplyr::filter(flightclass == flightClass) %>% 
     dplyr::pull(output) 
   
   round(distance * emissions_vector, 3)

@@ -18,9 +18,9 @@ tournament_calendar <- function(year) {
   })
   
   tennis_data %>% 
-    filter(tourney_year == year) %>% 
-    select(tourney_month, tourney_location, lat, long) %>% 
-    distinct() %>% 
+    dplyr::filter(tourney_year == year) %>% 
+    dplyr::select(tourney_month, tourney_location, lat, long) %>% 
+    dplyr::distinct() %>% 
     arrange(tourney_month) %>% 
     mutate(
       tourney_month = month.name[tourney_month],

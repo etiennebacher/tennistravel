@@ -11,7 +11,7 @@
 filter_player_year <- function(player, year) {
 
   tennis_data %>%
-    filter(tourney_year == year, grepl(player, player_name))
+    dplyr::filter(tourney_year == year, grepl(player, player_name))
 
 }
 

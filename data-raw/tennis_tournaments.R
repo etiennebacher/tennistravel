@@ -38,7 +38,7 @@ atp_files <- list.files(path = "data-raw", pattern = "atp_matches.*.csv")
 tennis_data <- lapply(atp_files, function(x) {
   
   read.csv(paste0("data-raw/", x)) %>%
-    select(tourney_name, tourney_date, winner_name,
+    dplyr::select(tourney_name, tourney_date, winner_name,
            winner_ioc, loser_name, loser_ioc) %>%
     mutate(
       tourney_year = as.numeric(substr(tourney_date, 1, 4)),
@@ -56,12 +56,12 @@ tennis_data <- lapply(atp_files, function(x) {
       loser_ioc = ifelse(win_lose == "loser_name", loser_ioc, NA)
     ) %>% 
     unite(winner_ioc, loser_ioc, col = "player_iso", na.rm = T) %>%
-    select(- win_lose) 
+    dplyr::select(- win_lose) 
   
 })
   
 tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
-  filter(
+  dplyr::filter(
     !grepl("Davis Cup", tourney_name),
     !grepl("Tournament of Champions", tourney_name),
     !grepl("ATP", tourney_name),
@@ -141,12 +141,12 @@ get_lat_long <- function(city) {
   #   # If this is not enough, round lat and long (which are very close but not
   #   # identical in some cases)
     x <- x %>%
-      filter(importance == max(importance)) %>%
-      select(lon, lat) %>%
+      dplyr::filter(importance == max(importance)) %>%
+      dplyr::select(lon, lat) %>%
       group_by(lon) %>%
       mutate(n = n()) %>%
       ungroup() %>%
-      filter(n == max(n))
+      dplyr::filter(n == max(n))
 
     return(
       data.frame(
@@ -166,12 +166,12 @@ geocodes_2 <- do.call(rbind.data.frame, geocodes) %>%
   mutate(
     across(c("long", "lat"), as.numeric)
   ) %>% 
-  distinct() %>% 
+  dplyr::distinct() %>% 
   # Some destinations appear in double because lat and long are slightly
   # different. These differences are not important in our case, so I remove 
   # these duplicates
   tibble::rownames_to_column() %>% 
-  filter(
+  dplyr::filter(
     !substr(rowname, nchar(rowname)-1, nchar(rowname)) %in% c(".2", ".3")
   ) %>% 
   tibble::column_to_rownames()
@@ -185,9 +185,9 @@ tennis_data_geocodes <- left_join(
   by = c("tourney_location" = "city")
 ) %>%
   arrange(player_name, tourney_date) %>% 
-  select(-tourney_date) %>% 
+  dplyr::select(-tourney_date) %>% 
   group_by(player_name, tourney_year) %>% 
-  distinct() %>% 
+  dplyr::distinct() %>% 
   mutate(order = row_number()) %>% 
   ungroup() %>% 
   mutate(

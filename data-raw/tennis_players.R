@@ -9,15 +9,15 @@ tennis_players_raw <- read.csv("data-raw/tennis_players.csv")
 
 tennis_players <-
   tennis_players_raw %>% 
-  select(first_name, last_name, birth_date, country_code) %>% 
+  dplyr::select(first_name, last_name, birth_date, country_code) %>% 
   rename("country_iso" = "country_code") %>% 
   # Eliminate all players that were above 45 in 2000
   mutate(
     birth_year = as.numeric(substr(birth_date, 1, 4)),
     age_2000 = 2000 - birth_year
   ) %>% 
-  filter(age_2000 <= 40) %>% 
-  select(- age_2000, - birth_year) %>% 
+  dplyr::filter(age_2000 <= 40) %>% 
+  dplyr::select(- age_2000, - birth_year) %>% 
   mutate(
     # countrycode from International Olympic Committee
     country_name = countrycode(country_iso, "ioc", "country.name"),
@@ -27,8 +27,8 @@ tennis_players <-
   unite(first_name, last_name, col = "full_name", sep = " ", na.rm = T)
   
 list_flags <- emo::jis %>%
-  filter(group == "Flags") %>% 
-  select(runes, emoji, name) %>% 
+  dplyr::filter(group == "Flags") %>% 
+  dplyr::select(runes, emoji, name) %>% 
   separate(runes, into = c("runes_1", "runes_2"), sep = " ") %>% 
   mutate(
     runes_1 = ifelse(!is.na(runes_1), paste0("U+", runes_1), NA),

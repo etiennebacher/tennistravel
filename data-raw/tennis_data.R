@@ -21,12 +21,12 @@ tennis_data <- tennis_data_geocodes %>%
   ) 
 
 birth_dates <- tennis_players %>% 
-  select(full_name, birth_date) %>% 
-  distinct()
+  dplyr::select(full_name, birth_date) %>% 
+  dplyr::distinct()
 
 flags <- tennis_players %>% 
-  select(country_iso, flag_runes, flag) %>% 
-  distinct()
+  dplyr::select(country_iso, flag_runes, flag) %>% 
+  dplyr::distinct()
 
 tennis_data <- tennis_data %>% 
   left_join(
@@ -38,7 +38,7 @@ tennis_data <- tennis_data %>%
     by = c("player_iso" = "country_iso")
   ) %>% 
   ungroup() %>% 
-  filter(!is.na(lat_d), !is.na(long_d), 
+  dplyr::filter(!is.na(lat_d), !is.na(long_d), 
            !is.na(lat_a), !is.na(long_a)) %>% 
   mutate(
     dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a),

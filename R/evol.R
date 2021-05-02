@@ -8,13 +8,13 @@
 evol_dist <- function(player) {
   
   tennis_data %>% 
-    filter(grepl(paste(player, collapse="|"), player_name)) %>% 
-    select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
+    dplyr::filter(grepl(paste(player, collapse="|"), player_name)) %>% 
+    dplyr::select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
     mutate(
       dist = custom_dist(lat_d, long_d, lat_a, long_a),
       tourney_year = factor(tourney_year)
     ) %>% 
-    select(-contains(c("_a", "_d"))) %>% 
+    dplyr::select(-contains(c("_a", "_d"))) %>% 
     group_by(player_name, tourney_year) %>% 
     summarise(dist = sum(dist, na.rm = T)) %>% 
     ungroup() %>% 
@@ -32,15 +32,15 @@ evol_dist <- function(player) {
 evol_footprint <- function(player, flightClass = "Unknown", output = "co2e") {
   
   tennis_data %>% 
-    filter(grepl(paste(player, collapse="|"), player_name)) %>% 
-    select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
+    dplyr::filter(grepl(paste(player, collapse="|"), player_name)) %>% 
+    dplyr::select(player_name, tourney_year, contains(c("_d", "_a"))) %>% 
     mutate(
       footprint = custom_footprint(lat_d, long_d, lat_a, long_a,
                                    flightClass = flightClass,
                                    output = output),
       tourney_year = factor(tourney_year)
     ) %>% 
-    select(-contains(c("_a", "_d"))) %>% 
+    dplyr::select(-contains(c("_a", "_d"))) %>% 
     group_by(player_name, tourney_year) %>% 
     summarise(footprint = sum(footprint, na.rm = T)) %>% 
     ungroup() %>% 

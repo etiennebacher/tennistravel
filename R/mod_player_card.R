@@ -18,10 +18,7 @@ mod_player_card_ui <- function(id){
   tagList(
     wellPanel2(
       fluidRow(
-        cus_p('Pick a player and a year, or let me pick for you, and click on "Go":',
-              style = "text-align: center;")
-      ),
-      fluidRow(
+        column(2),
         column(
           4, 
           shinyWidgets::pickerInput(
@@ -36,45 +33,75 @@ mod_player_card_ui <- function(id){
             ),
             selected = "Roger Federer",
             multiple = FALSE
-          )
-        ),
-        column(
-          4, 
-          shinyWidgets::pickerInput(
-            inputId = ns("year"),
-            label = "",
-            choices = NULL,
-            selected = NULL,
-            multiple = FALSE
-          )
+          ) %>% 
+            prompter::add_prompt(
+              message = "Choose a player"
+            )
         ),
         column(1),
         column(
-          2, 
+          1, 
           actionButton(
             ns("random_pick"),
             "Pick for me"
+          ) %>% 
+            prompter::add_prompt(
+              message = "Click to randomly select a player"
+            )
+        ),
+        column(4)
+      ),
+      br(),
+      br(),
+      fluidRow(
+        column(
+          2,
+          div(
+            textOutput(ns("flag")),
+            id = "pl_flag"
           )
         ),
-        column(1)
+        column(
+          10,
+          div(
+            textOutput(ns("name")),
+            id = "pl_name"
+          )
+        )
+      ),
+      fluidRow(
+        column(
+          7,
+          p("Distance max: ", id = "dist_label") %>% 
+            prompter::add_prompt(
+              message = "The largest distance a player made in a single season on the ATP Tour in his career."
+            )
+        ),
+        column(
+          5,
+          countup::odometerOutput(ns("count_distance")),
+          p(" km", id = "dist_label_2")
+        )
       ),
       br(),
       fluidRow(
-        column(5),
         column(
-          2,
-          shiny::actionButton(
-            ns("run"),
-            "Go!"
-          )
+          7,
+          p("Carbon footprint max: ", id = "carb_label") %>% 
+            prompter::add_prompt(
+              message = "The largest carbon footprint a player generated in a single season on the ATP Tour in his career."
+            ),
         ),
-        column(5)
+        column(
+          5,
+          countup::odometerOutput(ns("count_footprint")),
+          p(" kg of CO2", id = "carb_label_2")
+        )
       ),
       br(),
-      uiOutput(ns("player_card")),
       uiOutput(ns("player_evolution"))
     ),
-    longdiv(65)
+    longdiv(45)
   )
 }
     
@@ -92,20 +119,10 @@ mod_player_card_server <- function(input, output, session){
   
   ### Use "Pick for me" button
   observeEvent(input$random_pick, {
-    random_player <- sample(for_picker$player_name, 1, replace = T)
-    random_year <- for_picker %>% 
-      filter(player_name == random_player) %>% 
-      pull(tourney_year) %>% 
-      sample(., size = 1)
     shinyWidgets::updatePickerInput(
       session = session,
       inputId = "player",
-      selected = random_player
-    )
-    shinyWidgets::updatePickerInput(
-      session = session,
-      inputId = "year",
-      selected = random_year
+      selected = sample(for_picker$player_name, 1, replace = T)
     )
   })
   
@@ -116,107 +133,53 @@ mod_player_card_server <- function(input, output, session){
       filter(player_name == input$player)
   }) 
   
-  observe({
-    req(filtered_data())
-    shinyWidgets::updatePickerInput(
-      session,
-      "year",
-      choices = filtered_data() %>% 
-        pull(tourney_year) %>% 
-        unique
+  
+  ### Player card
+  output$flag <- renderText({
+    filtered_data() %>%
+      pull(flag) %>%
+      unique()
+  })
+  output$name <- renderText({
+    filtered_data() %>%
+      pull(player_name) %>%
+      unique()
+  })
+  output$count_distance <- countup::renderOdometer({
+    max_dist <- evol_dist(input$player) %>% 
+      pull(dist) %>% 
+      max %>% 
+      round(., 0)
+    countup::odometer(max_dist)
+  })
+  output$count_footprint <- countup::renderOdometer({
+    max_footprint <- evol_footprint(input$player) %>% 
+      pull(footprint) %>% 
+      max %>% 
+      round(., 0)
+    countup::odometer(max_footprint)
+  })
+
+  
+  ### Evolution for a player
+  output$player_evolution <- renderUI({
+    tagList(
+      hr(),
+      echarts4r::echarts4rOutput(
+        ns("evol_km")
+      ),
+      echarts4r::echarts4rOutput(
+        ns("evol_co2")
+      )
     )
   })
-  
-  observeEvent(input$run, {
-    
-    ### Card of player-season
-    output$player_card <- renderUI({
-      req(filtered_data(), input$year, input$player)
-      tagList(
-        br(),
-        fluidRow(
-          column(
-            2,
-            div(
-              textOutput(ns("flag")),
-              id = "pl_flag"
-            )
-          ),
-          column(
-            10,
-            div(
-              textOutput(ns("name")),
-              id = "pl_name"
-            )
-          )
-        ),
-        fluidRow(
-          column(
-            6,
-            shiny::tags$span(
-              p("Distance", id = "dist_label"),
-              p(": ", id = "dist_label")
-            )
-          ),
-          column(
-            6,
-            countup::odometerOutput(ns("count_distance")),
-            p("km", id = "dist_label_2")
-          )
-        ),
-        br(),
-        fluidRow(
-          column(
-            6,
-            p("Carbon footprint", id = "carb_label"),
-            p(": ", id = "carb_label")
-          ),
-          column(
-            6,
-            countup::odometerOutput(ns("count_footprint")),
-            p("kg of CO2", id = "carb_label_2")
-          )
-        ),
-        br()
-      )
-    })
-    output$flag <- renderText({
-      filtered_data() %>%
-        pull(flag) %>%
-        unique
-    })
-    output$name <- renderText({
-      filtered_data() %>%
-        pull(player_name) %>%
-        unique
-    })
-    output$count_distance <- countup::renderOdometer({
-      countup::odometer(dist_player_year(input$player, input$year))
-    })
-    output$count_footprint <- countup::renderOdometer({
-      countup::odometer(footprint_player_year(input$player, input$year))
-    })
-    
-    
-    ### Evolution for a player
-    output$player_evolution <- renderUI({
-      tagList(
-        hr(),
-        echarts4r::echarts4rOutput(
-          ns("evol_km")
-        ),
-        echarts4r::echarts4rOutput(
-          ns("evol_co2")
-        )
-      )
-    })
-    output$evol_km <- echarts4r::renderEcharts4r({
-      plot_evol(input$player, "dist")
-    })
-    output$evol_co2 <- echarts4r::renderEcharts4r({
-      plot_evol(input$player, "footprint")
-    })
+  output$evol_km <- echarts4r::renderEcharts4r({
+    plot_evol(input$player, "dist")
   })
+  output$evol_co2 <- echarts4r::renderEcharts4r({
+    plot_evol(input$player, "footprint")
+  })
+
   
 }
     

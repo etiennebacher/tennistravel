@@ -33,7 +33,16 @@ tournament_calendar <- function(year) {
       roam = TRUE, 
       itemStyle = list(
         color = '#003399', 
-        borderColor = "#fff")
+        borderColor = "#fff"
+      ),
+      emphasis = list(
+        itemStyle = list(
+          areaColor = "#80b3ff"
+        ),
+        label = list(
+          color = "yellow"
+        )
+      )
     ) %>% 
     e_scatter(
       lat, 

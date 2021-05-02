@@ -43,7 +43,7 @@ golem_add_external_resources <- function(){
       app_title = 'tennistravel'
     ),
     # Add here other external resources for example, you can add
-    # shinya?lert::useShinyalert()
+    # shinyalert::useShinyalert()
     vov::use_vov(),
     prompter::use_prompt(),
     gotop::use_gotop(

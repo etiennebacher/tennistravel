@@ -11,7 +11,7 @@ mod_atp_calendar_ui <- function(id){
   ns <- NS(id)
   tagList(
     wellPanel2(
-      cus_p("The ATP (Association of Tennis Professionals) Tour takes place all over the world. All of these trips imply that tennis players in general have a huge carbon footprint compared to average people. But can we quantify this carbon footprint?"),
+      cus_p("The ATP (Association of Tennis Professionals) Tour takes place all over the world."),
       br(),
       fluidRow(
         column(3),
@@ -28,7 +28,9 @@ mod_atp_calendar_ui <- function(id){
         column(3) 
       ),
       br(),
-      echarts4r::echarts4rOutput(ns("plot_calendar"))
+      echarts4r::echarts4rOutput(ns("plot_calendar")),
+      br(),
+      cus_p("All of these trips imply that tennis players in general have a huge carbon footprint compared to average people. But can we quantify this carbon footprint?")
     ),
     longdiv(65)
   )

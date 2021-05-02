@@ -31,10 +31,6 @@ mod_homepage_ui <- function(id){
 #' @noRd 
 mod_homepage_server <- function(input, output, session){
   ns <- session$ns
-  setup_pushbar()
-  observeEvent(input$open, {
-    pushbar_open(id = "myPushbar")
-  })  
 }
     
 ## To be copied in the UI

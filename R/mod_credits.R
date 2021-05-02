@@ -37,7 +37,7 @@ mod_credits_ui <- function(id){
       cus_p("The image in the background comes from",
             shiny::tags$a(href = "https://commons.wikimedia.org/wiki/File:2013_ATP_World_Tour_Finals_Berdych_vs_Ferrer.jpg",
                           "Wikimedia Commons,"),
-            " more specifically from andrewrendell. It is under ",
+            " more specifically from andrewrendell. I added the blurring effect. It is under ",
             shiny::tags$a(href = "https://creativecommons.org/licenses/by/2.0/",
                           "CC BY 2.0 license.")
           ),

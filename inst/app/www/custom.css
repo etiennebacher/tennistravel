@@ -41,6 +41,10 @@ body {
   color: var(--text-color);
 }
 
+.text > a {
+  color: #8080ff
+}
+
 .summary-home {
   color: var(--text-color);
 }

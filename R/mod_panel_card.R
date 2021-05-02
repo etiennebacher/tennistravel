@@ -18,13 +18,8 @@ mod_panel_card_ui <- function(id){
   tagList(
     wellPanel2(
       fluidRow(
-        column(2),
-        column(
-          8,
-          cus_p('Pick a player and a year, or let me pick for you, and click on "Go":',
-                style = "text-align: center;")
-        ),
-        column(2)
+        cus_p('Pick a player and a year, or let me pick for you, and click on "Go":',
+              style = "text-align: center;")
       ),
       fluidRow(
         column(

@@ -23,6 +23,13 @@ wellPanel2 <- function(...) {
     ...
   )
 }
+center_panel <- function(...) {
+  tagList(
+    column(width = 3),
+    column(width = 6, ...),
+    column(width = 3)
+  )
+}
 hr_white <- function() {
   shiny::tags$hr(style = "color: white;")
 }

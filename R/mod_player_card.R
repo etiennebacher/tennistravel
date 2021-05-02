@@ -10,10 +10,68 @@
 mod_player_card_ui <- function(id){
   ns <- NS(id)
 
+  for_picker <- tennis_data %>% 
+    select(player_name, player_iso, tourney_year) %>% 
+    filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
+    distinct()
+  
   tagList(
-    uiOutput(ns("card")),
-    fluidRow(
-      longdiv(65)
+    wellPanel2(
+      fluidRow(
+        cus_p('Pick a player and a year, or let me pick for you, and click on "Go":',
+              style = "text-align: center;")
+      ),
+      fluidRow(
+        column(
+          4, 
+          shinyWidgets::pickerInput(
+            inputId = ns("player"),
+            label = "",
+            choices = unique(for_picker$player_name),
+            choicesOpt = list(
+              subtext = unique(for_picker$player_iso)
+            ),
+            options = list(
+              `live-search` = TRUE
+            ),
+            selected = "Roger Federer",
+            multiple = FALSE
+          )
+        ),
+        column(
+          4, 
+          shinyWidgets::pickerInput(
+            inputId = ns("year"),
+            label = "",
+            choices = NULL,
+            selected = NULL,
+            multiple = FALSE
+          )
+        ),
+        column(1),
+        column(
+          2, 
+          actionButton(
+            ns("random_pick"),
+            "Pick for me"
+          )
+        ),
+        column(1)
+      ),
+      br(),
+      fluidRow(
+        column(5),
+        column(
+          2,
+          shiny::actionButton(
+            ns("run"),
+            "Go!"
+          )
+        ),
+        column(5)
+      ),
+      br(),
+      uiOutput(ns("player_card"))
     )
   )
 }
@@ -24,15 +82,23 @@ mod_player_card_ui <- function(id){
 mod_player_card_server <- function(input, output, session){
   ns <- session$ns
   
-  output$card <- renderUI({
-    mod_ui_card_1_ui("ui_card_1_ui_1")
-  })
-  
-  observeEvent(input[["ui_card_1_ui_1-compare"]], {
-    # output$card <- renderUI({
-    #   mod_ui_card_2_ui("ui_card_2_ui_1")
-    # })
-    htmlwidgets::JS("console.log('hello')")
+  ### Use "Pick for me" button
+  observeEvent(input$random_pick, {
+    random_player <- sample(for_picker$player_name, 1, replace = T)
+    random_year <- for_picker %>% 
+      filter(player_name == random_player) %>% 
+      pull(tourney_year) %>% 
+      sample(., size = 1)
+    shinyWidgets::updatePickerInput(
+      session = session,
+      inputId = "player",
+      selected = random_player
+    )
+    shinyWidgets::updatePickerInput(
+      session = session,
+      inputId = "year",
+      selected = random_year
+    )
   })
   
   filtered_data <- reactive({
@@ -57,8 +123,7 @@ mod_player_card_server <- function(input, output, session){
       req(filtered_data(), input$year, input$player)
       tagList(
         br(),
-        wellPanel2(
-          fluidRow(
+        fluidRow(
             column(2, 
                    div(
                      textOutput(ns("flag")),
@@ -100,7 +165,6 @@ mod_player_card_server <- function(input, output, session){
             ),
             column(5)
           )
-        )
       )
     })
     output$flag <- renderText({

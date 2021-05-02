@@ -11,9 +11,9 @@ mod_player_card_ui <- function(id){
   ns <- NS(id)
 
   for_picker <- tennis_data %>% 
-    select(player_name, player_iso, tourney_year) %>% 
-    filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
-    distinct()
+    dplyr::select(player_name, player_iso, tourney_year) %>% 
+    dplyr::filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
+    dplyr::distinct()
   
   tagList(
     wellPanel2(
@@ -113,9 +113,9 @@ mod_player_card_server <- function(input, output, session){
   
   
   for_picker <- tennis_data %>% 
-    select(player_name, player_iso, tourney_year) %>% 
-    filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
-    distinct()
+    dplyr::select(player_name, player_iso, tourney_year) %>% 
+    dplyr::filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
+    dplyr::distinct()
   
   ### Use "Pick for me" button
   observeEvent(input$random_pick, {
@@ -130,7 +130,7 @@ mod_player_card_server <- function(input, output, session){
   filtered_data <- reactive({
     req(input$player)
     tennis_data %>% 
-      filter(player_name == input$player)
+      dplyr::filter(player_name == input$player)
   }) 
   
   

@@ -18,7 +18,7 @@ mod_method_ui <- function(id){
       h3("Carbon footprint", style = "color: white;"),
       hr_white(),
     ),
-    longdiv(65)
+    longdiv(45)
   )
 }
     

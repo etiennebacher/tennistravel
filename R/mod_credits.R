@@ -14,12 +14,12 @@ mod_credits_ui <- function(id){
       h2("Credits", style = "text-align: center; color: white;"),
       h3("Data", style = "color: white;"),
       hr_white(),
-      cus_p("This Shiny app was made possible thanks to the huge work of ", 
+      cus_p("This Shiny app was made possible thanks to the work of ", 
             shiny::tags$a(href = "http://www.jeffsackmann.com/", "Jeff Sackmann,"),
             "who compiled all ATP matches from 1968 until today on a ",
             shiny::tags$a(href = "https://github.com/JeffSackmann/tennis_atp",
                           "GitHub repository."),
-            "This provides many information on each tournament, including the 
+            "This provides a lot of information on each tournament, including the 
             participants and the location."),
       br(),
       h3("Distance and footprint", style = "color: white;"),
@@ -51,10 +51,13 @@ mod_credits_ui <- function(id){
             ns("see_source"), "Source code", 
             icon = shiny::icon("github"),
             onclick ="window.open('https://github.com/etiennebacher/tennistravel/', '_blank')"
-          )
+          ),
+          br(),
+          br(),
+          cus_p("Made by", tags$a(href = "www.etiennebacher.com", target = "_blank", "Etienne Bacher"))
         ),
         column(4)
-      )
+      ),
     ),
     longdiv(15)
   )

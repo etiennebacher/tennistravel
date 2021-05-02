@@ -42,7 +42,8 @@ body {
 }
 
 .text > a {
-  color: #8080ff
+  color: #99c2ff;
+  text-decoration: underline dashed
 }
 
 .summary-home {
@@ -51,7 +52,7 @@ body {
 
 #wellp {
   opacity: 1;
-  background: rgba(0, 100, 255, 0.3)
+  background: rgba(0, 100, 255, 0.6)
 }
 
 /* Style for dropdown */
@@ -119,18 +120,19 @@ body {
   padding-top: 19px;
 }
 #dist_label, #carb_label{
-  font-size: 2.3em;
+  font-size: 2em;
   color: var(--text-color);
   display: inline;
+  text-decoration: underline dotted white;
 }
 #dist_label_2, #carb_label_2{
-  font-size: 2.3em;
+  font-size: 2em;
   color: var(--text-color);
   display: inline;
 }
 .odometer.html-widget.html-widget-output.shiny-bound-output {
   color: var(--text-color);
-  font-size: 2.7em;
+  font-size: 2em;
 }
 #player_card_ui_1-see_evol {
   height: 2.5em;

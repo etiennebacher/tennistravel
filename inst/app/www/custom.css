@@ -89,34 +89,42 @@ body {
 
 /* Player card */
 
-#ui_card_1_ui_1-random_pick {
-  margin-top : 1.4em;
+#player_card_ui_1-random_pick {
+  margin-top : 1.48em;
+  height: 2.4em
 }
-#ui_card_1_ui_1-run {
+#player_card_ui_1-run {
   margin-left: 1.3em;
 }
-#ui_card_1_ui_1-compare {
+#player_card_ui_1-compare {
   -moz-transform:rotate(90deg);
   -ms-transform:rotate(90deg);
   -o-transform:rotate(90deg);
   -webkit-transform:rotate(90deg);
   transform-origin: -17%;
 }
+
+#player_card_ui_1-count_distance {
+  margin-bottom: 0.45em
+}
+#player_card_ui_1-count_footprint {
+  margin-bottom: 0.45em
+}
 #pl_flag {
-  font-size: 6em;
+  font-size: 5em;
 }
 #pl_name {
-  font-size: 4em;
+  font-size: 3em;
   color: var(--text-color);
   padding-top: 19px;
 }
 #dist_label, #carb_label{
-  font-size: 2.7em;
+  font-size: 2.3em;
   color: var(--text-color);
   display: inline;
 }
 #dist_label_2, #carb_label_2{
-  font-size: 1em;
+  font-size: 2.3em;
   color: var(--text-color);
   display: inline;
 }

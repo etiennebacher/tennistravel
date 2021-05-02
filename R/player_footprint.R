@@ -58,11 +58,12 @@ footprint_player_year <- function(player, year, output = "co2e") {
     return(0)
 
   complete_footprint <- data_filtered %>%
-    pull(footprint_per_tourn) 
+    pull(footprint_per_tourn)  %>%
+    sum(., na.rm = T) %>% 
+    round(., 0)
   
-  return(
-    sum(complete_footprint, na.rm = T)
-  )
+
+  return(complete_footprint)
   
 }
 

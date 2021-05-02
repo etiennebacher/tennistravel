@@ -62,8 +62,8 @@ plot_evol <- function(player, indicator) {
   
   if (indicator == "dist") {
     data_type <- evol_dist(player)
-    plot_title <- paste0("Distance (in km) per year made by ", 
-                         knitr::combine_words(player))
+    plot_title <- paste0("Distance (in km) made by ", 
+                         knitr::combine_words(player), " per year")
   } else if (indicator == "footprint") {
     data_type <- evol_footprint(player)
     plot_title <- paste0("Carbon footprint (in kg of CO2) of ", 
@@ -71,12 +71,20 @@ plot_evol <- function(player, indicator) {
   }
   
   data_type %>%
-    complete(player_name, tourney_year) %>% 
+    tidyr::complete(player_name, tourney_year) %>% 
     group_by(player_name) %>% 
     arrange(indicator) %>% 
-    e_charts(tourney_year) %>%
-    e_line_(indicator) %>% 
+    e_charts(tourney_year, color = "yellow") %>%
+    e_line_(indicator, color = "yellow") %>% 
     e_legend(show = FALSE) %>%
-    e_title(text =  plot_title)
+    e_title(
+      text =  plot_title,
+      textStyle = list(color = "#fff", font = "normal")
+    ) %>% 
+    e_tooltip(
+      trigger = "axis"
+    ) %>% 
+    e_x_axis(axisLabel = list(color = "#fff")) %>% 
+    e_y_axis(axisLabel = list(color = "#fff"))
   
 }

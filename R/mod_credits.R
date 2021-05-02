@@ -24,7 +24,7 @@ mod_credits_ui <- function(id){
       br(),
       h3("Distance and footprint", style = "color: white;"),
       hr_white(),
-      cus_p("I used or inspired from the package", 
+      cus_p("I used (or modified) functions from the package", 
             shiny::tags$a(href= "https://github.com/acircleda/footprint",
                           "footprint,"),
             "created by ",

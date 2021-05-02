@@ -71,8 +71,10 @@ mod_player_card_ui <- function(id){
         column(5)
       ),
       br(),
-      uiOutput(ns("player_card"))
-    )
+      uiOutput(ns("player_card")),
+      uiOutput(ns("player_evolution"))
+    ),
+    longdiv(65)
   )
 }
     
@@ -81,6 +83,12 @@ mod_player_card_ui <- function(id){
 #' @noRd 
 mod_player_card_server <- function(input, output, session){
   ns <- session$ns
+  
+  
+  for_picker <- tennis_data %>% 
+    select(player_name, player_iso, tourney_year) %>% 
+    filter(!grepl("Unknown", player_name), !grepl("UNK", player_iso)) %>% 
+    distinct()
   
   ### Use "Pick for me" button
   observeEvent(input$random_pick, {
@@ -101,6 +109,7 @@ mod_player_card_server <- function(input, output, session){
     )
   })
   
+
   filtered_data <- reactive({
     req(input$player)
     tennis_data %>% 
@@ -119,52 +128,56 @@ mod_player_card_server <- function(input, output, session){
   })
   
   observeEvent(input$run, {
+    
+    ### Card of player-season
     output$player_card <- renderUI({
       req(filtered_data(), input$year, input$player)
       tagList(
         br(),
         fluidRow(
-            column(2, 
-                   div(
-                     textOutput(ns("flag")),
-                     id = "pl_flag"
-                    )
-            ),
-            column(10, 
-                   div(
-                     textOutput(ns("name")),
-                     id = "pl_name"
-                   )
+          column(
+            2,
+            div(
+              textOutput(ns("flag")),
+              id = "pl_flag"
             )
           ),
-          fluidRow(
-            column(
-              8, 
-              shiny::tags$span(
-                p("Distance", id = "dist_label"), 
-                p("(km)", id = "dist_label_2"),
-                p(": ", id = "dist_label")
-              )
-            ), 
-            column(4, countup::odometerOutput(ns("count_distance")))
-          ),
-          br(),
-          fluidRow(
-            column(8, p("Carbon footprint", id = "carb_label"),
-                   p("(kg of CO2)", id = "carb_label_2"),
-                   p(": ", id = "carb_label")), 
-            column(4, countup::odometerOutput(ns("count_footprint")))
-          ),
-          br(),
-          fluidRow(
-            column(5),
-            column(
-              2,
-              actionButton(ns("see_evol"), "Evolution", 
-                           icon = shiny::icon("line-chart"))
-            ),
-            column(5)
+          column(
+            10,
+            div(
+              textOutput(ns("name")),
+              id = "pl_name"
+            )
           )
+        ),
+        fluidRow(
+          column(
+            6,
+            shiny::tags$span(
+              p("Distance", id = "dist_label"),
+              p(": ", id = "dist_label")
+            )
+          ),
+          column(
+            6,
+            countup::odometerOutput(ns("count_distance")),
+            p("km", id = "dist_label_2")
+          )
+        ),
+        br(),
+        fluidRow(
+          column(
+            6,
+            p("Carbon footprint", id = "carb_label"),
+            p(": ", id = "carb_label")
+          ),
+          column(
+            6,
+            countup::odometerOutput(ns("count_footprint")),
+            p("kg of CO2", id = "carb_label_2")
+          )
+        ),
+        br()
       )
     })
     output$flag <- renderText({
@@ -182,6 +195,26 @@ mod_player_card_server <- function(input, output, session){
     })
     output$count_footprint <- countup::renderOdometer({
       countup::odometer(footprint_player_year(input$player, input$year))
+    })
+    
+    
+    ### Evolution for a player
+    output$player_evolution <- renderUI({
+      tagList(
+        hr(),
+        echarts4r::echarts4rOutput(
+          ns("evol_km")
+        ),
+        echarts4r::echarts4rOutput(
+          ns("evol_co2")
+        )
+      )
+    })
+    output$evol_km <- echarts4r::renderEcharts4r({
+      plot_evol(input$player, "dist")
+    })
+    output$evol_co2 <- echarts4r::renderEcharts4r({
+      plot_evol(input$player, "footprint")
     })
   })
   

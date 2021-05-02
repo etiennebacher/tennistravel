@@ -59,7 +59,8 @@ dist_player_year <- function(player, year) {
   
   complete_dist <- data_filtered %>%
     pull(dist_per_tourn) %>%
-    sum(., na.rm = T)
+    sum(., na.rm = T) %>% 
+    round(., 0)
   
   return(complete_dist)
   

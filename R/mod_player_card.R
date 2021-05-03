@@ -164,7 +164,6 @@ mod_player_card_server <- function(input, output, session){
   ### Evolution for a player
   output$player_evolution <- renderUI({
     tagList(
-      hr(),
       echarts4r::echarts4rOutput(
         ns("evol_km")
       ),

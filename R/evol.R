@@ -62,12 +62,10 @@ plot_evol <- function(player, indicator) {
   
   if (indicator == "dist") {
     data_type <- evol_dist(player)
-    plot_title <- paste0("Distance (in km) made by ", 
-                         knitr::combine_words(player), " per year")
+    plot_title <- paste0("Distance (in km)")
   } else if (indicator == "footprint") {
     data_type <- evol_footprint(player)
-    plot_title <- paste0("Carbon footprint (in kg of CO2) of ", 
-                         knitr::combine_words(player), " per year")
+    plot_title <- paste0("Carbon footprint (in kg of CO2)")
   }
   
   data_type %>%

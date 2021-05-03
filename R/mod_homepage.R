@@ -16,11 +16,20 @@ mod_homepage_ui <- function(id){
       ) %>% 
         vov::fade_in(duration = "slower")
     ),
-    longdiv(30),
+    longdiv(5),
+    # Mouse animation
+    # Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse-effect-using-html-and-css.html
     fluidRow(
-      column(5),
-      column(2, tags$i(id = "arrowdown", class="arrow down")),
-      column(5)
+      tags$div(
+        class = "moving-mouse-holder",
+        tags$div(
+          class = "mouse",
+          tags$div(
+            class = "mouse-button",
+            HTML("&nbsp;")
+          )
+        )
+      )
     ),
     longdiv(35)
   )

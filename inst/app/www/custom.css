@@ -10,6 +10,11 @@ body {
   background-attachment: fixed;
 }
 
+code {
+  background-color: rgba(0, 100, 255, 0.6);
+  color: white;
+}
+
 /* Mouse animation
 Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse-effect-using-html-and-css.html
 */

@@ -8,7 +8,6 @@ Imports:
     config,
     golem,
     shiny,
-    data.table,
     dplyr,
     tidyr,
     echarts4r,
@@ -20,6 +19,8 @@ Remotes:
     lgnbhl/textyle,
     lgnbhl/gotop,
     acircleda/footprint
+Suggests:
+    data.table
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

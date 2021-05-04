@@ -71,14 +71,14 @@ mod_player_card_ui <- function(id){
       ),
       fluidRow(
         column(
-          7,
+          6,
           p("Distance max: ", id = "dist_label") %>% 
             prompter::add_prompt(
               message = "The largest distance a player made in a single season on the ATP Tour in his career."
             )
         ),
         column(
-          5,
+          6,
           countup::odometerOutput(ns("count_distance")),
           p(" km", id = "dist_label_2")
         )
@@ -86,14 +86,14 @@ mod_player_card_ui <- function(id){
       br(),
       fluidRow(
         column(
-          7,
+          6,
           p("Carbon footprint max: ", id = "carb_label") %>% 
             prompter::add_prompt(
               message = "The largest carbon footprint a player generated in a single season on the ATP Tour in his career."
             ),
         ),
         column(
-          5,
+          6,
           countup::odometerOutput(ns("count_footprint")),
           p(" kg of CO2", id = "carb_label_2")
         )

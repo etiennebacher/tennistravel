@@ -106,6 +106,10 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   background-color: var(--bg-button);
   color: var(--text-color);
 }
+.btn-default:focus {
+  background-color: var(--bg-button);
+  color: var(--text-color);
+}
 .btn-default:hover {
   background-color: #6699ff;
   color: var(--text-color);

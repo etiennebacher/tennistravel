@@ -47,6 +47,7 @@ golem_add_external_resources <- function(){
     vov::use_vov(),
     prompter::use_prompt(),
     gotop::use_gotop(
+      src = "fas fa-arrow-circle-up",
       color = "white",
       opacity = 0.9,
       width = 60,

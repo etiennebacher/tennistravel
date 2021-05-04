@@ -26,9 +26,6 @@ custom_footprint(
 
 \item{output}{}
 }
-\value{
-
-}
 \description{
 Title
 }

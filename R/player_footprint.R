@@ -7,7 +7,6 @@
 #' @param flightClass 
 #' @param output 
 #'
-#' @return
 #' @export
 #'
 

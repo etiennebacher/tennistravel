@@ -11,9 +11,6 @@ map_travel(player, year)
 
 \item{year}{Year}
 }
-\value{
-
-}
 \description{
 Show on a map the trips of a particular player for a a year
 }

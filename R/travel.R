@@ -3,7 +3,6 @@
 #' @param player Player name
 #' @param year Year
 #'
-#' @return
 #' @export
 #'
 

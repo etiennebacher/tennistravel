@@ -57,7 +57,7 @@ mod_player_card_ui <- function(id){
         column(
           2,
           div(
-            textOutput(ns("flag")),
+            imageOutput(ns("flag")),
             id = "pl_flag"
           )
         ),
@@ -135,11 +135,22 @@ mod_player_card_server <- function(input, output, session){
   
   
   ### Player card
-  output$flag <- renderText({
-    filtered_data() %>%
-      pull(flag) %>%
-      unique()
-  })
+  output$flag <- renderImage({
+    country <- filtered_data() %>% 
+      pull(player_iso_2) %>% 
+      unique %>% 
+      tolower
+    filename <- normalizePath(
+      file.path(
+        paste0('./inst/app/www/flags/', country, '.svg')
+      )
+    )
+    list(
+      src = filename,
+      alt = paste("Image number")
+    )
+  }, deleteFile = FALSE)
+  
   output$name <- renderText({
     filtered_data() %>%
       pull(player_name) %>%

@@ -42,7 +42,8 @@ tennis_data <- tennis_data %>%
            !is.na(lat_a), !is.na(long_a)) %>% 
   mutate(
     dist_per_tourn = custom_dist(lat_d, long_d, lat_a, long_a),
-    footprint_per_tourn = custom_footprint(lat_d, long_d, lat_a, long_a)
+    footprint_per_tourn = custom_footprint(lat_d, long_d, lat_a, long_a),
+    player_iso_2 = countrycode::countrycode(player_iso, "ioc", "iso2c")
   )
 
 usethis::use_data(tennis_data, overwrite = T)

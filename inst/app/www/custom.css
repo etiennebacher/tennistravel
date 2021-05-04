@@ -124,13 +124,6 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
 #player_card_ui_1-run {
   margin-left: 1.3em;
 }
-#player_card_ui_1-compare {
-  -moz-transform:rotate(90deg);
-  -ms-transform:rotate(90deg);
-  -o-transform:rotate(90deg);
-  -webkit-transform:rotate(90deg);
-  transform-origin: -17%;
-}
 
 #player_card_ui_1-count_distance {
   margin-bottom: 0.45em
@@ -139,7 +132,8 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   margin-bottom: 0.45em
 }
 #pl_flag {
-  font-size: 5em;
+  font-size: 4.5em;
+  margin-bottom: -4.5em
 }
 #pl_name {
   font-size: 3em;

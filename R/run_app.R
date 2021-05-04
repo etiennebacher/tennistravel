@@ -11,8 +11,7 @@ run_app <- function(
   with_golem_options(
     app = shinyApp(
       ui = app_ui, 
-      server = app_server,
-      options = list(launch.browser = T)
+      server = app_server
     ), 
     golem_opts = list(...)
   )

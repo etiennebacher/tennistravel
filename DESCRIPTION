@@ -13,7 +13,14 @@ Imports:
     echarts4r,
     magrittr,
     prompter,
-    vov
+    vov,
+    pkgload,
+    htmlwidgets,
+    shinyWidgets,
+    gotop,
+    textyle,
+    countup,
+    footprint
 Remotes:
     JohnCoene/countup,
     lgnbhl/textyle,

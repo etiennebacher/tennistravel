@@ -54,7 +54,7 @@ mod_credits_ui <- function(id){
           ),
           br(),
           br(),
-          cus_p("Made by", tags$a(href = "www.etiennebacher.com", target = "_blank", "Etienne Bacher"))
+          cus_p("Made by", tags$a(href = "https://www.etiennebacher.com/", target = "_blank", "Etienne Bacher"))
         ),
         column(4)
       ),

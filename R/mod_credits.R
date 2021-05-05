@@ -32,14 +32,16 @@ mod_credits_ui <- function(id){
             "to compute the distance between two cities, and the carbon footprint",
             "corresponding to a plane trip between these two cities."),
       br(),
-      h3("Image", style = "color: white;"),
+      h3("Images", style = "color: white;"),
       hr_white(),
       cus_p("The image in the background comes from",
             shiny::tags$a(href = "https://commons.wikimedia.org/wiki/File:2013_ATP_World_Tour_Finals_Berdych_vs_Ferrer.jpg",
                           "Wikimedia Commons,"),
             " more specifically from andrewrendell. I added the blurring effect. It is under ",
             shiny::tags$a(href = "https://creativecommons.org/licenses/by/2.0/",
-                          "CC BY 2.0 license.")
+                          "CC BY 2.0 license."),
+            "The SVG flag icons were provided by ",
+            shiny::tags$a(href = "https://flagicons.lipis.dev/", "lipis.")
           ),
       br(),
       br(),
@@ -54,7 +56,7 @@ mod_credits_ui <- function(id){
           ),
           br(),
           br(),
-          cus_p("Made by", tags$a(href = "https://www.etiennebacher.com/", target = "_blank", "Etienne Bacher"))
+          cus_p("Made by", tags$a(href = "https://www.etiennebacher.com/", "Etienne Bacher"))
         ),
         column(4)
       ),

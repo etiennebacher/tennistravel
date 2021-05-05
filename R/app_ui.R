@@ -9,6 +9,7 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here 
+    echarts4r::e_common(font_family = 'Raleway'),
     fluidRow(
       longdiv(35),
       center_panel(

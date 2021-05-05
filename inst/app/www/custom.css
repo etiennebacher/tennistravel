@@ -1,6 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400&display=swap');
+
 :root {
   --text-color: white;
+  --text-font: 'Raleway', sans-serif;
   --bg-button: #3377ff;
+}
+
+* {
+  font-family: var(--text-font);
 }
 
 body {
@@ -56,7 +63,7 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
 }
 
 
-/* Text colors */
+/* Text */
 
 .h1 {
   color: var(--text-color);
@@ -70,6 +77,13 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   color: #99c2ff;
   text-decoration: underline dashed;
   text-underline-offset: 0.2em;
+}
+
+.text > a:hover {
+  color: #99c2ff;
+  text-decoration: underline dashed;
+  text-underline-offset: 0.2em;
+  font-weight: 600;
 }
 
 .summary-home {

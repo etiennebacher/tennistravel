@@ -12,7 +12,21 @@ map_travel <- function(player, year) {
     mutate(infos = paste(order, lead(arrival), sep = ",")) %>% 
     # group_by(order) %>%
     e_charts(long_d) %>%
-    e_geo(roam = TRUE) %>%
+    e_geo(
+      roam = TRUE, 
+      itemStyle = list(
+        color = '#003399', 
+        borderColor = "#fff"
+      ),
+      emphasis = list(
+        itemStyle = list(
+          areaColor = "#80b3ff"
+        ),
+        label = list(
+          color = "yellow"
+        )
+      )
+    ) %>%
     e_lines(
       long_d,
       lat_d,
@@ -21,7 +35,7 @@ map_travel <- function(player, year) {
       departure,
       arrival,
       infos,
-      lineStyle = list(normal = list(curveness = 0.3))
+      lineStyle = list(normal = list(curveness = 0.3, color = "yellow")),
     ) %>%
     e_tooltip(
       trigger = "item",
@@ -40,7 +54,11 @@ map_travel <- function(player, year) {
     e_scatter(
       lat_d,
       coord_system = "geo",
-      symbol_size = 10
+      symbol_size = 15,
+      itemStyle = list(
+        color = "yellow", 
+        borderColor = "#000"
+      )
     ) %>%
     e_legend(show = FALSE)
   

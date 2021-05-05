@@ -181,6 +181,24 @@ mod_player_card_server <- function(input, output, session){
       ),
       echarts4r::echarts4rOutput(
         ns("evol_co2")
+      ),
+      br(),
+      fluidRow(
+        column(5),
+        column(
+          2, 
+          shinyWidgets::pickerInput(
+            inputId = ns("year"),
+            label = "",
+            choices = sort(unique(filtered_data()$tourney_year)),
+            selected = round(mean(filtered_data()$tourney_year), 0),
+            multiple = FALSE
+          )
+        ),
+        column(5) 
+      ),
+      echarts4r::echarts4rOutput(
+        ns("map_travel")
       )
     )
   })
@@ -189,6 +207,9 @@ mod_player_card_server <- function(input, output, session){
   })
   output$evol_co2 <- echarts4r::renderEcharts4r({
     plot_evol(input$player, "footprint")
+  })
+  output$map_travel <- echarts4r::renderEcharts4r({
+    map_travel(input$player, as.numeric(input$year))
   })
 
   

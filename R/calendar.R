@@ -51,7 +51,8 @@ tournament_calendar <- function(year) {
       bind = tourney_location, 
       itemStyle = list(
         color = "yellow", 
-        borderColor = "#000")
+        borderColor = "#000"
+      )
     ) %>% 
     e_legend(show = F) %>% 
     e_tooltip(

@@ -54,6 +54,8 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
     transform: translate(0, 6px) scale(1, 0.8);
   }
 }
+
+
 /* Text colors */
 
 .h1 {
@@ -172,3 +174,12 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   text-align: center;
   margin-left: 1.3em;
 }
+
+/* Sever box when disconnected */
+
+.severed.panel {
+  background-color: rgba(0, 100, 255, 0.6);
+  width: 25em;
+  height: 13em
+}
+

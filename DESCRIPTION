@@ -20,7 +20,8 @@ Imports:
     gotop,
     textyle,
     countup,
-    footprint
+    footprint,
+    sever
 Remotes:
     JohnCoene/countup,
     lgnbhl/textyle,

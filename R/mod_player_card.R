@@ -35,7 +35,8 @@ mod_player_card_ui <- function(id){
             multiple = FALSE
           ) %>% 
             prompter::add_prompt(
-              message = "Choose a player"
+              message = "Choose a player",
+              position = "top"
             )
         ),
         column(1),

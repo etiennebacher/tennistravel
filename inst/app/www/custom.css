@@ -66,7 +66,8 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
 
 .text > a {
   color: #99c2ff;
-  text-decoration: underline dashed
+  text-decoration: underline dashed;
+  text-underline-offset: 0.2em;
 }
 
 .summary-home {
@@ -145,6 +146,7 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   color: var(--text-color);
   display: inline;
   text-decoration: underline dotted white;
+  text-underline-offset: 0.2em;
 }
 #dist_label_2, #carb_label_2{
   font-size: 2em;

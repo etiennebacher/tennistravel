@@ -90,7 +90,7 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   font-family: var(--text-font);
 }
 
-#wellp {
+.wellp {
   opacity: 1;
   background: rgba(0, 100, 255, 0.6)
 }

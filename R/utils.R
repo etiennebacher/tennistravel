@@ -19,7 +19,7 @@ longdiv <- function(x, ...){
 }
 wellPanel2 <- function(...) {
   shiny::wellPanel(
-    id = "wellp",
+    class = "wellp",
     ...
   )
 }

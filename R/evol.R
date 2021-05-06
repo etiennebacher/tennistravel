@@ -25,6 +25,8 @@ evol_dist <- function(player) {
 #' Compute the evolution of footprint per year for a specific player
 #'
 #' @param player Player name
+#' @param flightClass Flight class of the individual. Default is 'Unknown', as in package footprint.
+#' @param output Unit of footprint. Default is CO2, as in package footprint.
 #'
 #' @return A tibble
 #' @export

@@ -118,7 +118,7 @@ tennis_data_2 <- data.table::rbindlist(tennis_data) %>%
       tourney_location == "Masters" & dplyr::between(tourney_year, 2003, 2004) ~ "Houston",
       tourney_location == "Masters" & dplyr::between(tourney_year, 2005, 2008) ~ "Shanghai",
       tourney_location == "Masters" & dplyr::between(tourney_year, 2009, 2020) ~ "London",
-      tourney_location == "Canada" & is_even(tourney_year)  ~ "Montréal",
+      tourney_location == "Canada" & is_even(tourney_year)  ~ "Montreal",
       tourney_location == "Canada" & !is_even(tourney_year)  ~ "Toronto",
       TRUE ~ tourney_location
     )

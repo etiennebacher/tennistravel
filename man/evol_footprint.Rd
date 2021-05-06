@@ -8,6 +8,10 @@ evol_footprint(player, flightClass = "Unknown", output = "co2e")
 }
 \arguments{
 \item{player}{Player name}
+
+\item{flightClass}{Flight class of the individual. Default is 'Unknown', as in package footprint.}
+
+\item{output}{Unit of footprint. Default is CO2, as in package footprint.}
 }
 \value{
 A tibble

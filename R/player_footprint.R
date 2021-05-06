@@ -10,7 +10,19 @@
 #' @export
 #'
 
-# Used in data-raw scripts
+#' Used in data-raw scripts
+#'
+#' @param departure_lat Latitude of departure city
+#' @param departure_long Longitude of departure city
+#' @param arrival_lat Latitude of arrival city
+#' @param arrival_long Longitude of arrival city
+#' @param flightClass Flight class of individual
+#' @param output Unit of carbon footprint
+#'
+#' @return
+#' @export
+#'
+#' @examples
 custom_footprint <- function(
   departure_lat,
   departure_long,
@@ -32,7 +44,7 @@ custom_footprint <- function(
     distance >= 3700 ~ "long",
     TRUE ~ "medium"
   )) %>% 
-    left_join(footprint:::conversion_factors, by = c("value" = "distance")) %>% 
+    left_join(conversion_factors, by = c("value" = "distance")) %>% 
     dplyr::filter(flightclass == flightClass) %>% 
     dplyr::pull(output) 
   

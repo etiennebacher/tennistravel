@@ -14,17 +14,20 @@ custom_footprint(
 )
 }
 \arguments{
-\item{departure_lat}{}
+\item{departure_lat}{Latitude of departure city}
 
-\item{departure_long}{}
+\item{departure_long}{Longitude of departure city}
 
-\item{arrival_lat}{}
+\item{arrival_lat}{Latitude of arrival city}
 
-\item{arrival_long}{}
+\item{arrival_long}{Longitude of arrival city}
 
-\item{flightClass}{}
+\item{flightClass}{Flight class of individual}
 
-\item{output}{}
+\item{output}{Unit of carbon footprint}
+}
+\value{
+
 }
 \description{
 Title

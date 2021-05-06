@@ -1,15 +1,3 @@
-#' Title
-#'
-#' @param departure_lat 
-#' @param departure_long 
-#' @param arrival_lat 
-#' @param arrival_long 
-#' @param flightClass 
-#' @param output 
-#'
-#' @export
-#'
-
 #' Used in data-raw scripts
 #'
 #' @param departure_lat Latitude of departure city
@@ -19,10 +7,8 @@
 #' @param flightClass Flight class of individual
 #' @param output Unit of carbon footprint
 #'
-#' @return
 #' @export
 #'
-#' @examples
 custom_footprint <- function(
   departure_lat,
   departure_long,

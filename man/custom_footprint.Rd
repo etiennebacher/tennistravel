@@ -2,7 +2,7 @@
 % Please edit documentation in R/player_footprint.R
 \name{custom_footprint}
 \alias{custom_footprint}
-\title{Title}
+\title{Used in data-raw scripts}
 \usage{
 custom_footprint(
   departure_lat,
@@ -26,9 +26,6 @@ custom_footprint(
 
 \item{output}{Unit of carbon footprint}
 }
-\value{
-
-}
 \description{
-Title
+Used in data-raw scripts
 }

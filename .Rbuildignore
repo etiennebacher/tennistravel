@@ -7,3 +7,5 @@ $run_dev.*
 ^app\.R$
 ^rsconnect$
 ^LICENSE\.md$
+^thumb.png$
+^large.png$

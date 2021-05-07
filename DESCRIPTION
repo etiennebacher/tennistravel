@@ -6,6 +6,7 @@ Description: PKG_DESC.
 License: MIT + file LICENSE
 Imports: 
     config,
+    utils,
     golem,
     shiny,
     dplyr,

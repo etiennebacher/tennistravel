@@ -173,11 +173,6 @@ Comes from: https://josefzacek.com/blog/how-to-create-scroll-down-animated-mouse
   color: var(--text-color);
   font-size: 2em;
 }
-#player_card_ui_1-see_evol {
-  height: 2.5em;
-  width: 9em;
-  text-align: center
-}
 
 
 /* Credits panel */
